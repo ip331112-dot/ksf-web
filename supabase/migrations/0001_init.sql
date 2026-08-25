@@ -116,10 +116,22 @@ create policy "admins update lead status"
 
 -- ---------------------------------------------------------------------
 -- 5. Grant the existing account staff access
---    Matches by email so it works whatever the user id turns out to be.
+--
+--     The account was registered as ksftechservices@gmaill.com — note the
+--     double L, a typo in the original signup. Matching on the intended
+--     spelling would insert zero rows and silently lock everyone out, so
+--     this matches the user id instead, which is stable whether or not the
+--     address is later corrected.
+--
+--     To add more staff later:
+--       insert into public.admins (user_id, email)
+--       select id, email from auth.users where email = 'them@example.com';
 -- ---------------------------------------------------------------------
 insert into public.admins (user_id, email)
-select id, email from auth.users where email = 'ksftechservices@gmail.com'
+select id, email
+from auth.users
+where id = '77b3d936-68ec-4102-b968-bae610a8a645'
+   or email in ('ksftechservices@gmaill.com', 'ksftechservices@gmail.com')
 on conflict (user_id) do nothing;
 
 
