@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/* ===================================================================
+   KSF TECH SERVICES — brand tokens
+   Derived from the logo and flyer. Single source of truth.
+   No colour is ever hand-typed into a component.
+   =================================================================== */
+
+@theme {
+  /* Core palette */
+  --color-navy: #0a1b3d;
+  --color-navy-2: #132b5e;
+  --color-navy-3: #1d3d7a;
+  --color-blue: #0b63e5;
+  --color-blue-lift: #1e9bff;
+  --color-blue-soft: #e8f1fe;
+  --color-red: #c8102e;
+  --color-red-soft: #fdeaed;
+
+  /* Surfaces and text — neutrals biased toward the brand blue */
+  --color-ground: #f4f7fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eaf0f8;
+  --color-line: #d5dfec;
+  --color-line-soft: #e6ecf5;
+  --color-ink: #14213d;
+  --color-ink-dim: #53638a;
+  --color-ink-faint: #7a88a5;
+
+  /* Semantic */
+  --color-ok: #0f7a4d;
+  --color-ok-soft: #e7f5ee;
+  --color-warn: #a65a00;
+
+  /* Type */
+  --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-plex-sans), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, Consolas, monospace;
+
+  /* Rhythm */
+  --spacing-section: 5.5rem;
+}
+
+/* ===================================================================
+   Base
+   =================================================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    letter-spacing: -0.018em;
+    line-height: 1.1;
+  }
+
+  p { text-wrap: pretty; }
+
+  /* Visible keyboard focus, brand blue, everywhere */
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  ::selection {
+    background-color: var(--color-blue);
+    color: #fff;
+  }
+}
+
+/* ===================================================================
+   Utilities
+   =================================================================== */
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Navy gradient used by the hero, CTA bands and footer */
+@utility bg-navy-grad {
+  background-image:
+    radial-gradient(120% 140% at 88% -20%, rgba(30, 155, 255, 0.32), transparent 62%),
+    linear-gradient(158deg, var(--color-navy) 0%, var(--color-navy-2) 100%);
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
