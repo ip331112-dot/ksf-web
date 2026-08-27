@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Phone, Mail, Globe, AlertTriangle } from "lucide-react";
+import { Phone, Mail, Globe } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SITE, SERVICES } from "@/content/site";
+import { EnquiryForm } from "@/components/contact/EnquiryForm";
+import { isLeadPipelineReady } from "@/lib/supabase/admin";
+import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -10,18 +12,14 @@ export const metadata: Metadata = {
 };
 
 /**
- * The form markup is real and validated by the browser, but it cannot be
- * submitted yet: the server action needs SUPABASE_SERVICE_ROLE_KEY, Resend
- * and Turnstile, none of which exist. Rather than accept a message and
- * silently drop it — the worst possible outcome for an enquiry — the
- * submit control is disabled and the phone and email routes are given
- * equal prominence.
- *
- * Stage 2 Track B replaces `disabled` with the server action.
+ * The form goes live on its own the moment SUPABASE_SERVICE_ROLE_KEY
+ * exists — until then it refuses input and shows the direct routes,
+ * because accepting a message with nowhere to put it is the worst
+ * possible outcome for an enquiry.
  */
-const PIPELINE_READY = false;
-
 export default function ContactPage() {
+  const pipelineReady = isLeadPipelineReady();
+
   return (
     <>
       <SiteHeader />
@@ -46,130 +44,11 @@ export default function ContactPage() {
             <div>
               <h2 className="text-2xl font-extrabold text-navy">Send an enquiry</h2>
 
-              {!PIPELINE_READY && (
-                <div className="mt-5 flex gap-3 border border-warn/40 bg-warn/5 p-4">
-                  <AlertTriangle
-                    size={18}
-                    className="mt-0.5 shrink-0 text-warn"
-                    aria-hidden="true"
-                  />
-                  <p className="text-[0.875rem] leading-relaxed text-ink-dim">
-                    <strong className="font-semibold text-navy">
-                      This form is not live yet.
-                    </strong>{" "}
-                    We are still connecting it, and we would rather tell you than
-                    take your message and lose it. Please email{" "}
-                    <a
-                      href={`mailto:${SITE.email}`}
-                      className="font-semibold text-blue hover:underline"
-                    >
-                      {SITE.email}
-                    </a>{" "}
-                    or call us — both reach us today.
-                  </p>
-                </div>
-              )}
-
-              <form className="mt-6 flex flex-col gap-4" aria-describedby="form-state">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="name" className="text-[0.8rem] font-semibold text-navy">
-                      Your name
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      minLength={2}
-                      maxLength={120}
-                      autoComplete="name"
-                      disabled={!PIPELINE_READY}
-                      className="border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30 disabled:bg-surface-2 disabled:text-ink-faint"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="email" className="text-[0.8rem] font-semibold text-navy">
-                      Email
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      autoComplete="email"
-                      disabled={!PIPELINE_READY}
-                      className="border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30 disabled:bg-surface-2 disabled:text-ink-faint"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="phone" className="text-[0.8rem] font-semibold text-navy">
-                      Phone <span className="font-normal text-ink-faint">(optional)</span>
-                    </label>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      maxLength={40}
-                      autoComplete="tel"
-                      disabled={!PIPELINE_READY}
-                      className="border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30 disabled:bg-surface-2 disabled:text-ink-faint"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="service" className="text-[0.8rem] font-semibold text-navy">
-                      What is this about?
-                    </label>
-                    <select
-                      id="service"
-                      name="service"
-                      defaultValue=""
-                      disabled={!PIPELINE_READY}
-                      className="border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30 disabled:bg-surface-2 disabled:text-ink-faint"
-                    >
-                      <option value="">Select…</option>
-                      {SERVICES.map((s) => (
-                        <option key={s.slug} value={s.slug}>
-                          {s.name}
-                        </option>
-                      ))}
-                      <option value="training">Certification training</option>
-                      <option value="other">Something else</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label htmlFor="message" className="text-[0.8rem] font-semibold text-navy">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    minLength={10}
-                    maxLength={4000}
-                    rows={6}
-                    disabled={!PIPELINE_READY}
-                    className="resize-y border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30 disabled:bg-surface-2 disabled:text-ink-faint"
-                  />
-                </div>
-
-                <div>
-                  <button
-                    type="submit"
-                    disabled={!PIPELINE_READY}
-                    className="inline-flex items-center gap-2 bg-blue px-6 py-3.5 font-semibold text-white transition-colors hover:bg-blue-lift disabled:cursor-not-allowed disabled:bg-ink-faint"
-                  >
-                    Send enquiry
-                  </button>
-                  <p id="form-state" className="mt-2.5 text-[0.8rem] text-ink-faint">
-                    {PIPELINE_READY
-                      ? "We reply to every enquiry."
-                      : "Sending is disabled until this form is connected. Use email or phone."}
-                  </p>
-                </div>
-              </form>
+              <EnquiryForm
+                sourcePath="/contact"
+                turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                pipelineReady={pipelineReady}
+              />
             </div>
 
             {/* Direct routes */}

@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Check, Mail, Phone } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { EnquiryForm } from "@/components/contact/EnquiryForm";
+import { isLeadPipelineReady } from "@/lib/supabase/admin";
 import { SERVICES, getService, SITE } from "@/content/site";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -25,6 +27,7 @@ export default async function ServicePage({ params }: Params) {
   if (!service) notFound();
 
   const others = SERVICES.filter((s) => s.slug !== service.slug);
+  const pipelineReady = isLeadPipelineReady();
 
   return (
     <>
@@ -63,11 +66,6 @@ export default async function ServicePage({ params }: Params) {
               </ul>
             </div>
 
-            {/*
-              Enquiry form — UI only at this stage.
-              Wiring to the `leads` table via a server action, with zod
-              validation, honeypot, Turnstile and rate limiting, is week 1.
-            */}
             <aside className="border border-line bg-surface-2 p-6 lg:sticky lg:top-24">
               <h2 className="font-display text-lg font-semibold text-navy">
                 Talk to us about {service.name.toLowerCase()}
@@ -76,50 +74,13 @@ export default async function ServicePage({ params }: Params) {
                 Tell us what you need. We reply within {SITE.responseTime}.
               </p>
 
-              <form className="mt-5 flex flex-col gap-3">
-                <div>
-                  <label htmlFor="name" className="eyebrow text-ink-faint">Name</label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    className="mt-1.5 w-full border border-line bg-surface px-3 py-2.5 text-[0.9rem] outline-none focus:border-blue"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="eyebrow text-ink-faint">Email</label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    className="mt-1.5 w-full border border-line bg-surface px-3 py-2.5 text-[0.9rem] outline-none focus:border-blue"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="eyebrow text-ink-faint">
-                    What do you need?
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    className="mt-1.5 w-full resize-y border border-line bg-surface px-3 py-2.5 text-[0.9rem] outline-none focus:border-blue"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled
-                  className="mt-1 flex items-center justify-center gap-2 bg-blue px-6 py-3 font-semibold text-white transition-colors hover:bg-navy-3 disabled:cursor-not-allowed disabled:opacity-55"
-                >
-                  Send enquiry
-                </button>
-                <p className="text-[0.72rem] text-ink-faint">
-                  Form submission goes live once the backend is connected. In the
-                  meantime, email or call us directly.
-                </p>
-              </form>
+              <EnquiryForm
+                variant="compact"
+                sourcePath={`/services/${service.slug}`}
+                defaultService={service.slug}
+                turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                pipelineReady={pipelineReady}
+              />
 
               <div className="mt-5 flex flex-col gap-2 border-t border-line pt-5 text-[0.85rem]">
                 <a
