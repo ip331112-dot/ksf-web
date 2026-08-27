@@ -115,13 +115,25 @@ create policy "admins update lead status"
 
 
 -- ---------------------------------------------------------------------
--- 5. Grant the existing account staff access
+-- 5. Grant the KSF account staff access
 --
---     The account was registered as ksftechservices@gmaill.com — note the
---     double L, a typo in the original signup. Matching on the intended
---     spelling would insert zero rows and silently lock everyone out, so
---     this matches the user id instead, which is stable whether or not the
---     address is later corrected.
+--     Matched by user id, not by email, and deliberately so. The account
+--     was registered as kfstechservices@gmail.com — K and S transposed.
+--     The owner's actual address is ksftechservices@gmail.com, confirmed
+--     2026-08-27, and chose to keep the account rather than recreate it.
+--     The id is the one thing here that is not in dispute.
+--
+--     KNOWN RISK, recorded so nobody has to rediscover it: a password
+--     reset on this account emails kfstechservices@gmail.com, which the
+--     owner does not control. Losing that password means losing /admin.
+--     Fixing it means creating a new account on the correct address and
+--     re-running this file — the second clause below already matches it,
+--     so no edit is needed when that day comes.
+--
+--     RUN ORDER MATTERS. This selects from auth.users, so the account has
+--     to exist first. Run it too early and it inserts zero rows, leaving
+--     /admin unreachable with no error to explain why. The whole file is
+--     idempotent, so if that happens, just run it again.
 --
 --     To add more staff later:
 --       insert into public.admins (user_id, email)
@@ -130,16 +142,28 @@ create policy "admins update lead status"
 insert into public.admins (user_id, email)
 select id, email
 from auth.users
-where id = '77b3d936-68ec-4102-b968-bae610a8a645'
-   or email in ('ksftechservices@gmaill.com', 'ksftechservices@gmail.com')
+where id = '1b790698-a10c-4867-b80e-122070f7ca0a'
+   or email = 'ksftechservices@gmail.com'
 on conflict (user_id) do nothing;
 
 
 -- ---------------------------------------------------------------------
--- 6. Verify — expect: leads and admins present, RLS true, 1 admin row
+-- 6. Verify — expect: leads and admins present, and exactly 1 admin row
+--
+--     Zero admin rows is the failure that looks like success: every
+--     statement above will have run without complaint, and sign-in will
+--     still be refused. Read the last line of the output.
 -- ---------------------------------------------------------------------
 select 'tables' as check, table_name as detail
 from information_schema.tables
 where table_schema = 'public' and table_name in ('leads','admins')
 union all
-select 'admin rows', count(*)::text from public.admins;
+select
+  'admin rows',
+  count(*)::text ||
+  case
+    when count(*) = 0
+      then ' — NOT DONE: create the auth user, then run this file again'
+    else ' — ok'
+  end
+from public.admins;

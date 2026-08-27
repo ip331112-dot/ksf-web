@@ -4,7 +4,7 @@ const VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 export type TurnstileOutcome =
   | { ok: true }
-  | { ok: false; reason: "missing-token" | "rejected" | "unreachable" };
+  | { ok: false; reason: "missing-token" | "rejected" | "unreachable" | "not-configured" };
 
 /** Whether Cloudflare Turnstile is configured on this deployment. */
 export function isTurnstileConfigured(): boolean {
@@ -16,11 +16,20 @@ export function isTurnstileConfigured(): boolean {
 /**
  * Verify a Turnstile token with Cloudflare.
  *
- * When the keys are absent this returns ok in development so the form can
- * be worked on locally, but NOT in production — shipping without a
- * challenge would quietly leave the enquiry table open to bots, and a
- * silent downgrade is exactly the kind of thing nobody notices until the
- * spam arrives.
+ * Behaviour when TURNSTILE_SECRET_KEY is absent:
+ *
+ *   development             allowed, so the form can be worked on locally
+ *   production              REFUSED, unless ENQUIRIES_WITHOUT_TURNSTILE=true
+ *
+ * The production refusal is deliberate — shipping without a challenge
+ * leaves the enquiry table open to bots, and a silent downgrade is the
+ * kind of thing nobody notices until the spam arrives.
+ *
+ * But an unexplained total outage is its own failure, and this one cost a
+ * confused afternoon: every submission failing with a generic "we could
+ * not send that", no clue why. So the refusal now logs exactly what is
+ * wrong and how to resolve it, and there is a documented escape hatch for
+ * launching before the Cloudflare account exists. Set it knowingly.
  */
 export async function verifyTurnstile(
   token: string | undefined,
@@ -29,9 +38,25 @@ export async function verifyTurnstile(
   const secret = process.env.TURNSTILE_SECRET_KEY;
 
   if (!secret) {
-    return process.env.NODE_ENV === "production"
-      ? { ok: false, reason: "unreachable" }
-      : { ok: true };
+    if (process.env.NODE_ENV !== "production") return { ok: true };
+
+    if (process.env.ENQUIRIES_WITHOUT_TURNSTILE === "true") {
+      console.warn(
+        "[turnstile] Running WITHOUT bot protection: TURNSTILE_SECRET_KEY is " +
+          "unset and ENQUIRIES_WITHOUT_TURNSTILE=true. The honeypot and rate " +
+          "limit are still active. Add Turnstile keys and remove this flag.",
+      );
+      return { ok: true };
+    }
+
+    console.error(
+      "[turnstile] Enquiry REFUSED: TURNSTILE_SECRET_KEY is not set and this " +
+        "is a production build, so every submission will fail. Either add " +
+        "NEXT_PUBLIC_TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY, or set " +
+        "ENQUIRIES_WITHOUT_TURNSTILE=true to accept enquiries without a " +
+        "challenge.",
+    );
+    return { ok: false, reason: "not-configured" };
   }
 
   if (!token) return { ok: false, reason: "missing-token" };

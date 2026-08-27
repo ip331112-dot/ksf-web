@@ -107,13 +107,16 @@ export async function submitEnquiry(
     ip ?? undefined,
   );
   if (!turnstile.ok) {
+    // A misconfigured deployment is our fault, not the visitor's, so they
+    // get the fallback with real contact routes rather than "try again",
+    // which would never succeed.
+    const ourFault =
+      turnstile.reason === "unreachable" || turnstile.reason === "not-configured";
+
     return {
       ok: false,
-      message:
-        turnstile.reason === "unreachable"
-          ? FALLBACK
-          : "That check did not pass. Please try again.",
-      errors: { turnstile: "Verification failed." },
+      message: ourFault ? FALLBACK : "That check did not pass. Please try again.",
+      errors: ourFault ? undefined : { turnstile: "Verification failed." },
       values: typed,
     };
   }
