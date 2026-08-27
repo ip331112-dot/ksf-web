@@ -4,6 +4,7 @@ import { Inbox, ShieldAlert, Mail, Phone } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { KsfLogo } from "@/components/brand/KsfLogo";
 import { SignOutButton } from "@/components/admin/SignOutButton";
+import { StatusControls } from "@/components/admin/StatusControls";
 import { SITE } from "@/content/site";
 
 export const dynamic = "force-dynamic";
@@ -152,10 +153,9 @@ export default async function AdminDashboard() {
                   No enquiries yet
                 </h2>
                 <p className="max-w-md text-[0.875rem] text-ink-dim">
-                  The contact form is not connected yet, so nothing can arrive
-                  here. Once the enquiry pipeline is live, submissions from the
-                  contact page and the five service pages will appear in this
-                  queue.
+                  Enquiries from the contact page, the five service pages and
+                  the track apply pages all arrive here, newest first. Nothing
+                  has come in yet.
                 </p>
                 <Link
                   href="/contact"
@@ -219,6 +219,8 @@ export default async function AdminDashboard() {
                         {lead.service && <span>{lead.service}</span>}
                         {lead.source_path && <span>from {lead.source_path}</span>}
                       </div>
+
+                      <StatusControls leadId={lead.id} current={lead.status} />
                     </li>
                   );
                 })}

@@ -53,6 +53,18 @@ export const enquirySchema = z.object({
 
 export type EnquiryInput = z.infer<typeof enquirySchema>;
 
+/**
+ * The statuses a lead can hold, matching the CHECK constraint on
+ * public.leads exactly.
+ *
+ * These live here rather than beside the admin action because a
+ * `"use server"` module may only export async functions — everything it
+ * exports becomes a callable endpoint, so a plain constant is a build
+ * error. Shared values belong in a plain module like this one.
+ */
+export const LEAD_STATUSES = ["new", "read", "replied", "archived", "spam"] as const;
+export type LeadStatus = (typeof LEAD_STATUSES)[number];
+
 /** Field-level errors keyed by input name, plus a form-level message. */
 export type EnquiryState = {
   ok: boolean;
