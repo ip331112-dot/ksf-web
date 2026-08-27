@@ -2,8 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Inbox, ShieldAlert, Mail, Phone } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { KsfLogo } from "@/components/brand/KsfLogo";
-import { SignOutButton } from "@/components/admin/SignOutButton";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 import { StatusControls } from "@/components/admin/StatusControls";
 import { SITE } from "@/content/site";
 
@@ -89,22 +88,7 @@ export default async function AdminDashboard() {
 
   return (
     <>
-      <header className="border-b border-line bg-navy">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 lg:px-8">
-          <div className="flex items-center gap-4">
-            <KsfLogo tone="dark" href="/admin" />
-            <span className="hidden font-mono text-[0.65rem] tracking-widest text-white/50 uppercase sm:inline">
-              Admin
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="hidden text-[0.8rem] text-white/60 sm:inline">
-              {user.email}
-            </span>
-            <SignOutButton />
-          </div>
-        </div>
-      </header>
+      <AdminHeader email={user.email} active="enquiries" />
 
       <main id="main" className="mx-auto max-w-6xl px-5 py-10 lg:px-8">
         {!isAdmin ? (
