@@ -70,8 +70,15 @@ export const applicationSchema = stepAbout
   .and(
     z.object({
       courseSlug: z.string().trim().min(2).max(80),
-      /** Honeypot — hidden from people, irresistible to naive bots. */
-      company: z.string().max(0).optional().or(z.literal("")),
+      /**
+       * Honeypot. Accepted permissively here on purpose — the action
+       * checks it BEFORE validating, so a filled one is silently
+       * discarded rather than surfacing as a visible field error that
+       * tells a bot it was caught.
+       */
+      company: z.string().optional(),
+      /** Cloudflare Turnstile token, read from the widget on step 4. */
+      turnstileToken: z.string().optional(),
     }),
   );
 

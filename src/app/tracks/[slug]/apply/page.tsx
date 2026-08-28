@@ -73,6 +73,7 @@ export default async function ApplyPage({ params }: Params) {
           trackName={track.shortName}
           priceGbp={PRICE_GBP}
           paymentRequired={paymentRequired}
+          turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         />
 
         <aside className="mt-12 border-t border-line pt-8">

@@ -11,6 +11,7 @@ import {
   useTransition,
 } from "react";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import { ArrowLeft, ArrowRight, Loader2, Check } from "lucide-react";
 import { submitApplication } from "@/lib/applications/actions";
 import {
@@ -34,12 +35,20 @@ type Props = {
   trackName: string;
   priceGbp: number;
   paymentRequired: boolean;
+  /** Absent when Turnstile is not configured; the widget is then skipped. */
+  turnstileSiteKey?: string;
 };
 
 const field =
   "w-full border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30";
 
-export function ApplyFlow({ courseSlug, trackName, priceGbp, paymentRequired }: Props) {
+export function ApplyFlow({
+  courseSlug,
+  trackName,
+  priceGbp,
+  paymentRequired,
+  turnstileSiteKey,
+}: Props) {
   const router = useRouter();
   const uid = useId();
   const [step, setStep] = useState(0);
@@ -47,6 +56,8 @@ export function ApplyFlow({ courseSlug, trackName, priceGbp, paymentRequired }: 
   const [formError, setFormError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
 
   /**
    * The draft lives in localStorage, not in React state — so answers
@@ -117,12 +128,21 @@ export function ApplyFlow({ courseSlug, trackName, priceGbp, paymentRequired }: 
     setFormError(null);
     if (!validateStep(3)) return;
 
+    // Turnstile writes its token into a hidden input inside its own
+    // container. There is no <form> here — the flow submits an object to a
+    // server action — so it is read from the DOM rather than FormData.
+    const turnstileToken =
+      turnstileRef.current
+        ?.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]')
+        ?.value ?? undefined;
+
     startTransition(async () => {
       const res = await submitApplication({
         ...draft,
         courseSlug,
         weeklyHours: draft.weeklyHours === "" ? "" : draft.weeklyHours,
-        company: "",
+        company: honeypotRef.current?.value ?? "",
+        turnstileToken,
       });
 
       if (!res.ok) {
@@ -423,6 +443,48 @@ export function ApplyFlow({ courseSlug, trackName, priceGbp, paymentRequired }: 
                   affects my 14-day cancellation right.
                 </span>
               </label>
+            )}
+
+            {/*
+              Honeypot. Hidden from people and from screen readers, but a
+              bot parsing the markup fills it in and gives itself away.
+              Deliberately uncontrolled — it must never round-trip through
+              the draft, or it would be restored from localStorage.
+            */}
+            <div
+              aria-hidden="true"
+              className="absolute left-[-9999px] h-0 w-0 overflow-hidden"
+            >
+              <label htmlFor={`${uid}-company`}>Company</label>
+              <input
+                ref={honeypotRef}
+                id={`${uid}-company`}
+                name="company"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                defaultValue=""
+              />
+            </div>
+
+            {/*
+              Turnstile lives on the final step, where the submission
+              actually happens. Without this the action would receive no
+              token, and every application would be refused the moment
+              Turnstile keys are configured.
+            */}
+            {turnstileSiteKey && (
+              <div ref={turnstileRef}>
+                <Script
+                  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                  strategy="lazyOnload"
+                />
+                <div
+                  className="cf-turnstile"
+                  data-sitekey={turnstileSiteKey}
+                  data-theme="light"
+                />
+              </div>
             )}
           </>
         )}

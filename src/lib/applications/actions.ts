@@ -43,6 +43,27 @@ async function hashedIp(): Promise<{ hash: string | null; ip: string | null }> {
 }
 
 export async function submitApplication(raw: unknown): Promise<ApplyResult> {
+  /**
+   * Honeypot first, before validation.
+   *
+   * The schema rejects a non-empty `company`, so checking after parsing
+   * made the silent-accept branch below unreachable: a bot received
+   * "please check the highlighted answers" and learned it had been
+   * caught. A honeypot that announces itself is not a honeypot.
+   */
+  const honeypot =
+    raw !== null && typeof raw === "object"
+      ? (raw as Record<string, unknown>).company
+      : undefined;
+
+  if (typeof honeypot === "string" && honeypot.trim().length > 0) {
+    return {
+      ok: true,
+      reference: `KSF-${new Date().getFullYear()}-0000`,
+      statusPath: "",
+    };
+  }
+
   const parsed = applicationSchema.safeParse(raw);
 
   if (!parsed.success) {
@@ -58,11 +79,6 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
 
   const app = parsed.data;
 
-  // Honeypot: accept, discard, reveal nothing.
-  if (app.company) {
-    return { ok: true, reference: "KSF-0000-0000", statusPath: "/" };
-  }
-
   // The track must exist. A submission naming an unknown slug is either a
   // stale bookmark or someone probing, and neither should reach the table.
   if (!getTrack(app.courseSlug)) {
@@ -71,7 +87,7 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
 
   const { hash: ipHash, ip } = await hashedIp();
 
-  const turnstile = await verifyTurnstile(undefined, ip ?? undefined);
+  const turnstile = await verifyTurnstile(app.turnstileToken, ip ?? undefined);
   if (!turnstile.ok) {
     const ourFault = turnstile.reason === "unreachable" || turnstile.reason === "not-configured";
     return {
