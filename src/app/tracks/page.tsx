@@ -22,7 +22,7 @@ export default function TracksPage() {
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue">Certification tracks</span>
+            <span className="eyebrow text-blue-lift">Certification tracks</span>
             <h1 className="mt-3 max-w-2xl text-4xl font-extrabold text-navy sm:text-5xl">
               Every track, one subscription
             </h1>
@@ -61,7 +61,7 @@ export default function TracksPage() {
                     <span className="font-mono text-[0.72rem] text-ink-faint">
                       {t.level} · {t.hours}h
                     </span>
-                    <span className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue">
+                    <span className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue-lift">
                       From £{PRICE_GBP}
                       <ArrowRight
                         size={14}
@@ -77,7 +77,7 @@ export default function TracksPage() {
           {/* Not sure which track? */}
           <div className="mt-10 flex flex-col items-start gap-4 border border-line bg-surface-2 p-7 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
-              <HelpCircle size={20} className="mt-0.5 shrink-0 text-blue" />
+              <HelpCircle size={20} className="mt-0.5 shrink-0 text-blue-lift" />
               <div>
                 <h2 className="font-display text-lg font-semibold text-navy">
                   Not sure which track fits?
@@ -90,7 +90,7 @@ export default function TracksPage() {
             </div>
             <Link
               href="/contact"
-              className="shrink-0 border border-navy px-6 py-3 font-semibold text-navy transition-colors hover:bg-navy hover:text-white"
+              className="shrink-0 border border-navy px-6 py-3 font-semibold text-navy transition-colors hover:bg-navy hover:text-ground"
             >
               Ask us
             </Link>

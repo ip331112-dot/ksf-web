@@ -33,7 +33,7 @@ export function LegalShell({
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-3xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue">Legal</span>
+            <span className="eyebrow text-blue-lift">Legal</span>
             <h1 className="mt-3 text-4xl font-extrabold text-balance text-navy">
               {title}
             </h1>
@@ -54,7 +54,7 @@ export function LegalShell({
                 contract. If you need this information now, email{" "}
                 <a
                   href={`mailto:${SITE.email}`}
-                  className="font-semibold text-blue hover:underline"
+                  className="font-semibold text-blue-lift hover:underline"
                 >
                   {SITE.email}
                 </a>{" "}
@@ -80,7 +80,7 @@ export function LegalShell({
 
           <p className="mt-10 border-t border-line pt-6 text-[0.85rem] text-ink-faint">
             Trading as {SITE.tradingName}. Registered address {SITE.tradingAddress}.{" "}
-            <Link href="/contact" className="font-semibold text-blue hover:underline">
+            <Link href="/contact" className="font-semibold text-blue-lift hover:underline">
               Contact us
             </Link>
             .

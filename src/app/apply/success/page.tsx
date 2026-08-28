@@ -70,7 +70,7 @@ export default async function ApplySuccessPage({
         {statusPath ? (
           <div className="mt-6 border border-blue bg-blue/5 p-6">
             <div className="flex items-start gap-2.5">
-              <Link2 size={18} className="mt-0.5 shrink-0 text-blue" aria-hidden="true" />
+              <Link2 size={18} className="mt-0.5 shrink-0 text-blue-lift" aria-hidden="true" />
               <div className="min-w-0">
                 <h2 className="font-display font-semibold text-navy">
                   Your private status link
@@ -85,7 +85,7 @@ export default async function ApplySuccessPage({
                 </p>
                 <Link
                   href={statusPath}
-                  className="mt-3 block overflow-x-auto border border-line bg-surface px-3 py-2.5 font-mono text-[0.78rem] break-all text-blue hover:underline"
+                  className="mt-3 block overflow-x-auto border border-line bg-surface px-3 py-2.5 font-mono text-[0.78rem] break-all text-blue-lift hover:underline"
                 >
                   {statusPath}
                 </Link>
@@ -133,7 +133,7 @@ export default async function ApplySuccessPage({
           <p className="mt-2 max-w-prose text-[0.875rem] leading-relaxed text-ink-dim">
             We are not sending confirmation emails yet, so this page is your
             record — that is why the link above matters. If you lose it, email{" "}
-            <a href={`mailto:${SITE.email}`} className="font-semibold text-blue hover:underline">
+            <a href={`mailto:${SITE.email}`} className="font-semibold text-blue-lift hover:underline">
               {SITE.email}
             </a>{" "}
             with your reference.
@@ -142,7 +142,7 @@ export default async function ApplySuccessPage({
 
         <Link
           href="/"
-          className="mt-10 inline-flex items-center gap-2 border border-line px-5 py-3 font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue"
+          className="mt-10 inline-flex items-center gap-2 border border-line px-5 py-3 font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue-lift"
         >
           Back to the site
         </Link>

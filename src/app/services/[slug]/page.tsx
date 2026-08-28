@@ -36,9 +36,9 @@ export default async function ServicePage({ params }: Params) {
       <main id="main">
         <nav aria-label="Breadcrumb" className="border-b border-line bg-surface-2">
           <ol className="mx-auto flex max-w-6xl gap-2 px-5 py-3 font-mono text-[0.72rem] text-ink-faint lg:px-8">
-            <li><Link href="/" className="hover:text-blue">Home</Link></li>
+            <li><Link href="/" className="hover:text-blue-lift">Home</Link></li>
             <li aria-hidden>›</li>
-            <li><Link href="/services" className="hover:text-blue">Services</Link></li>
+            <li><Link href="/services" className="hover:text-blue-lift">Services</Link></li>
             <li aria-hidden>›</li>
             <li className="text-ink" aria-current="page">{service.name}</li>
           </ol>
@@ -47,7 +47,7 @@ export default async function ServicePage({ params }: Params) {
         <div className="mx-auto max-w-6xl px-5 lg:px-8">
           <div className="grid gap-12 py-14 lg:grid-cols-[1.5fr_1fr] lg:items-start">
             <div>
-              <span className="eyebrow text-blue">{service.tagline}</span>
+              <span className="eyebrow text-blue-lift">{service.tagline}</span>
               <h1 className="mt-3 text-4xl font-extrabold text-navy sm:text-5xl">
                 {service.name}
               </h1>
@@ -59,7 +59,7 @@ export default async function ServicePage({ params }: Params) {
               <ul className="mt-4 flex flex-col gap-2.5">
                 {service.points.map((p) => (
                   <li key={p} className="flex items-start gap-2.5 text-[0.95rem]">
-                    <Check size={16} className="mt-1.5 shrink-0 text-blue" />
+                    <Check size={16} className="mt-1.5 shrink-0 text-blue-lift" />
                     <span className="text-ink-dim">{p}</span>
                   </li>
                 ))}
@@ -85,16 +85,16 @@ export default async function ServicePage({ params }: Params) {
               <div className="mt-5 flex flex-col gap-2 border-t border-line pt-5 text-[0.85rem]">
                 <a
                   href={`mailto:${SITE.email}`}
-                  className="flex items-center gap-2 text-ink-dim hover:text-blue"
+                  className="flex items-center gap-2 text-ink-dim hover:text-blue-lift"
                 >
-                  <Mail size={14} className="text-blue" />
+                  <Mail size={14} className="text-blue-lift" />
                   {SITE.email}
                 </a>
                 <a
                   href={`tel:${SITE.phoneUk.replace(/\s/g, "")}`}
-                  className="flex items-center gap-2 text-ink-dim hover:text-blue"
+                  className="flex items-center gap-2 text-ink-dim hover:text-blue-lift"
                 >
-                  <Phone size={14} className="text-blue" />
+                  <Phone size={14} className="text-blue-lift" />
                   {SITE.phoneUk}
                 </a>
               </div>
@@ -114,7 +114,7 @@ export default async function ServicePage({ params }: Params) {
                   >
                     <h3 className="font-display font-semibold text-navy">{s.name}</h3>
                     <p className="mt-1 text-[0.78rem] text-ink-dim">{s.tagline}</p>
-                    <span className="mt-3 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue">
+                    <span className="mt-3 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue-lift">
                       View
                       <ArrowRight
                         size={13}

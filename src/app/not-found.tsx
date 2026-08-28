@@ -19,7 +19,7 @@ export default function NotFound() {
     <>
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 py-20 lg:px-8 lg:py-28">
-        <p className="font-mono text-xs tracking-[0.2em] text-blue uppercase">
+        <p className="font-mono text-xs tracking-[0.2em] text-blue-lift uppercase">
           Error 404
         </p>
         <h1 className="mt-4 max-w-2xl text-3xl font-extrabold text-balance text-navy sm:text-4xl">
@@ -43,7 +43,7 @@ export default function NotFound() {
               <span className="mt-1 block font-display font-semibold text-navy">
                 {t.name}
               </span>
-              <span className="mt-2 inline-flex items-center gap-1 text-sm text-blue">
+              <span className="mt-2 inline-flex items-center gap-1 text-sm text-blue-lift">
                 View track
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
               </span>

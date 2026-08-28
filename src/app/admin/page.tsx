@@ -21,7 +21,7 @@ type Lead = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  new: "border-blue text-blue bg-blue-soft",
+  new: "border-blue text-blue-lift bg-blue-soft",
   read: "border-line text-ink-dim",
   replied: "border-ok text-ok bg-ok-soft",
   archived: "border-line text-ink-faint",
@@ -143,7 +143,7 @@ export default async function AdminDashboard() {
                 </p>
                 <Link
                   href="/contact"
-                  className="mt-1 text-[0.85rem] font-semibold text-blue hover:underline"
+                  className="mt-1 text-[0.85rem] font-semibold text-blue-lift hover:underline"
                 >
                   View the contact page
                 </Link>
@@ -163,12 +163,12 @@ export default async function AdminDashboard() {
                             {lead.name}
                           </h2>
                           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-[0.8rem] text-ink-dim">
-                            <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-1.5 hover:text-blue">
+                            <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-1.5 hover:text-blue-lift">
                               <Mail size={13} aria-hidden="true" />
                               {lead.email}
                             </a>
                             {lead.phone && (
-                              <a href={`tel:${lead.phone}`} className="inline-flex items-center gap-1.5 hover:text-blue">
+                              <a href={`tel:${lead.phone}`} className="inline-flex items-center gap-1.5 hover:text-blue-lift">
                                 <Phone size={13} aria-hidden="true" />
                                 {lead.phone}
                               </a>
@@ -227,7 +227,7 @@ function Stat({
   tone: "blue" | "ok" | "red";
 }) {
   const tones = {
-    blue: "border-blue text-blue",
+    blue: "border-blue text-blue-lift",
     ok: "border-ok text-ok",
     red: value > 0 ? "border-red text-red" : "border-line text-ink-faint",
   };

@@ -20,7 +20,7 @@ export default function ServicesPage() {
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue">Services</span>
+            <span className="eyebrow text-blue-lift">Services</span>
             <h1 className="mt-3 max-w-2xl text-4xl font-extrabold text-navy sm:text-5xl">
               {SITE.strapline}
             </h1>
@@ -43,11 +43,11 @@ export default function ServicesPage() {
                   <h2 className="font-display text-lg font-semibold text-navy">
                     {s.name}
                   </h2>
-                  <p className="mt-1 text-[0.8rem] font-medium text-blue">{s.tagline}</p>
+                  <p className="mt-1 text-[0.8rem] font-medium text-blue-lift">{s.tagline}</p>
                   <p className="mt-3 flex-1 text-[0.875rem] leading-relaxed text-ink-dim">
                     {s.summary}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue-lift">
                     Learn more
                     <ArrowRight
                       size={14}

@@ -56,7 +56,7 @@ export default function HomePage() {
         <section className="bg-navy-grad">
           <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:px-8 lg:py-28">
             <div>
-              <span className="eyebrow inline-flex items-center gap-2 bg-red px-3 py-1.5 text-white">
+              <span className="eyebrow inline-flex items-center gap-2 bg-blue px-3 py-1.5 text-white">
                 <ShieldCheck size={13} />
                 {SITE.kicker}
               </span>
@@ -103,7 +103,7 @@ export default function HomePage() {
               const Icon = PROMISE_ICONS[i];
               return (
                 <div key={p.title} className="flex items-start gap-3">
-                  <Icon size={20} className="mt-0.5 shrink-0 text-blue" />
+                  <Icon size={20} className="mt-0.5 shrink-0 text-blue-lift" />
                   <div>
                     <h3 className="text-[0.95rem] font-semibold text-navy">{p.title}</h3>
                     <p className="text-[0.85rem] text-ink-dim">{p.body}</p>
@@ -117,7 +117,7 @@ export default function HomePage() {
         {/* 04 · Certification tracks */}
         <section className="mx-auto max-w-6xl px-5 py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
-            <span className="eyebrow text-blue">Certification tracks</span>
+            <span className="eyebrow text-blue-lift">Certification tracks</span>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
               Eight tracks. One subscription.
             </h2>
@@ -153,7 +153,7 @@ export default function HomePage() {
                     <span className="font-mono text-[0.72rem] text-ink-faint">
                       {t.level} · {t.hours}h
                     </span>
-                    <span className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue">
+                    <span className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue-lift">
                       Apply from £{PRICE_GBP}
                       <ArrowRight
                         size={14}
@@ -171,7 +171,7 @@ export default function HomePage() {
         <section className="border-y border-line bg-surface-2">
           <div className="mx-auto max-w-6xl px-5 py-20 lg:px-8">
             <div className="max-w-2xl">
-              <span className="eyebrow text-blue">How it works</span>
+              <span className="eyebrow text-blue-lift">How it works</span>
               <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
                 Apply, and get a real answer
               </h2>
@@ -180,7 +180,7 @@ export default function HomePage() {
             <ol className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {HOW_IT_WORKS.map((s) => (
                 <li key={s.step} className="border-t-2 border-blue pt-4">
-                  <span className="font-mono text-[0.72rem] tracking-widest text-blue">
+                  <span className="font-mono text-[0.72rem] tracking-widest text-blue-lift">
                     {s.step}
                   </span>
                   <h3 className="mt-2 font-display text-lg font-semibold text-navy">
@@ -208,7 +208,7 @@ export default function HomePage() {
         {/* 06 · Services */}
         <section className="mx-auto max-w-6xl px-5 py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
-            <span className="eyebrow text-blue">What else we do</span>
+            <span className="eyebrow text-blue-lift">What else we do</span>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
               KSF is a working security firm
             </h2>
@@ -228,11 +228,11 @@ export default function HomePage() {
                   <h3 className="font-display text-lg font-semibold text-navy">
                     {s.name}
                   </h3>
-                  <p className="mt-1 text-[0.8rem] font-medium text-blue">{s.tagline}</p>
+                  <p className="mt-1 text-[0.8rem] font-medium text-blue-lift">{s.tagline}</p>
                   <p className="mt-3 flex-1 text-[0.875rem] leading-relaxed text-ink-dim">
                     {s.summary}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue-lift">
                     Learn more
                     <ArrowRight
                       size={14}
@@ -249,7 +249,7 @@ export default function HomePage() {
         <section className="border-y border-line bg-surface-2">
           <div className="mx-auto grid max-w-6xl gap-10 px-5 py-20 lg:grid-cols-[1.4fr_1fr] lg:px-8">
             <div>
-              <span className="eyebrow text-blue">Why KSF</span>
+              <span className="eyebrow text-blue-lift">Why KSF</span>
               <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
                 Small intake, real mentorship
               </h2>
@@ -266,7 +266,7 @@ export default function HomePage() {
               </p>
               <Link
                 href="/about"
-                className="mt-6 inline-flex items-center gap-1.5 font-semibold text-blue hover:underline"
+                className="mt-6 inline-flex items-center gap-1.5 font-semibold text-blue-lift hover:underline"
               >
                 More about KSF
                 <ArrowRight size={15} />
@@ -319,7 +319,7 @@ export default function HomePage() {
 
         {/* 10 · FAQ */}
         <section className="mx-auto max-w-3xl px-5 py-20 lg:py-24">
-          <span className="eyebrow text-blue">Questions</span>
+          <span className="eyebrow text-blue-lift">Questions</span>
           <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
             Before you apply
           </h2>
@@ -333,7 +333,7 @@ export default function HomePage() {
                 <summary className="cursor-pointer list-none font-display text-[1.02rem] font-semibold text-navy marker:content-none">
                   <span className="flex items-start justify-between gap-4">
                     {item.q}
-                    <span className="mt-0.5 shrink-0 font-mono text-blue transition-transform group-open:rotate-45">
+                    <span className="mt-0.5 shrink-0 font-mono text-blue-lift transition-transform group-open:rotate-45">
                       +
                     </span>
                   </span>

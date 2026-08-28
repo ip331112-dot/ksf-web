@@ -210,7 +210,7 @@ function Stat({
   tone: "blue" | "ok" | "red" | "plain";
 }) {
   const tones = {
-    blue: "border-blue text-blue",
+    blue: "border-blue text-blue-lift",
     ok: "border-ok text-ok",
     plain: "border-line text-navy",
     red: value > 0 ? "border-red text-red" : "border-line text-ink-faint",

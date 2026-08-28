@@ -50,7 +50,7 @@ export default async function ApplyPage({ params }: Params) {
           <KsfLogo />
           <Link
             href={`/tracks/${track.slug}`}
-            className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-ink-dim hover:text-blue"
+            className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-ink-dim hover:text-blue-lift"
           >
             <ArrowLeft size={14} aria-hidden="true" />
             Back to {track.shortName}
@@ -59,7 +59,7 @@ export default async function ApplyPage({ params }: Params) {
       </header>
 
       <main id="main" className="mx-auto max-w-4xl px-5 py-10 lg:px-8 lg:py-14">
-        <span className="eyebrow text-blue">Apply · {track.examCode}</span>
+        <span className="eyebrow text-blue-lift">Apply · {track.examCode}</span>
         <h1 className="mt-3 text-3xl font-extrabold text-balance text-navy sm:text-4xl">
           {track.name}
         </h1>

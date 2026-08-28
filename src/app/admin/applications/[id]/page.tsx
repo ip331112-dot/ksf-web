@@ -86,7 +86,7 @@ export default async function ApplicationDetail({
       <main id="main" className="mx-auto max-w-6xl px-5 py-8 lg:px-8">
         <Link
           href="/admin/applications"
-          className="inline-flex items-center gap-1.5 text-[0.82rem] font-semibold text-ink-dim hover:text-blue"
+          className="inline-flex items-center gap-1.5 text-[0.82rem] font-semibold text-ink-dim hover:text-blue-lift"
         >
           <ArrowLeft size={14} aria-hidden="true" />
           All applications
@@ -126,22 +126,22 @@ export default async function ApplicationDetail({
               <h2 className="font-display font-semibold text-navy">Contact</h2>
               <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-[0.85rem]">
                 <li className="flex items-center gap-2">
-                  <Mail size={14} className="text-blue" aria-hidden="true" />
-                  <a href={`mailto:${app.email}`} className="text-ink-dim hover:text-blue">
+                  <Mail size={14} className="text-blue-lift" aria-hidden="true" />
+                  <a href={`mailto:${app.email}`} className="text-ink-dim hover:text-blue-lift">
                     {app.email}
                   </a>
                 </li>
                 {app.phone && (
                   <li className="flex items-center gap-2">
-                    <Phone size={14} className="text-blue" aria-hidden="true" />
-                    <a href={`tel:${app.phone}`} className="text-ink-dim hover:text-blue">
+                    <Phone size={14} className="text-blue-lift" aria-hidden="true" />
+                    <a href={`tel:${app.phone}`} className="text-ink-dim hover:text-blue-lift">
                       {app.phone}
                     </a>
                   </li>
                 )}
                 {app.country && (
                   <li className="flex items-center gap-2 text-ink-dim">
-                    <Globe size={14} className="text-blue" aria-hidden="true" />
+                    <Globe size={14} className="text-blue-lift" aria-hidden="true" />
                     {app.country}
                   </li>
                 )}

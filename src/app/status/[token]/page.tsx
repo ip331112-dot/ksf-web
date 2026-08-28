@@ -133,7 +133,7 @@ export default async function StatusPage({
       </header>
 
       <main id="main" className="mx-auto max-w-3xl px-5 py-12 lg:px-8">
-        <span className="eyebrow text-blue">Your application</span>
+        <span className="eyebrow text-blue-lift">Your application</span>
         <h1 className="mt-3 font-mono text-2xl font-bold tracking-wide text-navy sm:text-3xl">
           {app.reference}
         </h1>
@@ -221,7 +221,7 @@ export default async function StatusPage({
         {feedback ? (
           <section className="mt-4 border-2 border-blue bg-surface p-6">
             <div className="flex items-center gap-2">
-              <MessageSquare size={17} className="text-blue" aria-hidden="true" />
+              <MessageSquare size={17} className="text-blue-lift" aria-hidden="true" />
               <h2 className="font-display font-semibold text-navy">
                 Your feedback from KSF
               </h2>
@@ -253,7 +253,7 @@ export default async function StatusPage({
               <h2 className="font-display font-semibold text-navy">Need something?</h2>
               <p className="mt-1.5 max-w-prose text-[0.875rem] leading-relaxed text-ink-dim">
                 To ask about your application or to withdraw it, email{" "}
-                <a href={`mailto:${SITE.email}`} className="font-semibold text-blue hover:underline">
+                <a href={`mailto:${SITE.email}`} className="font-semibold text-blue-lift hover:underline">
                   {SITE.email}
                 </a>{" "}
                 quoting {app.reference}. This link is private to you — treat it
@@ -265,7 +265,7 @@ export default async function StatusPage({
 
         <Link
           href="/"
-          className="mt-8 inline-flex items-center gap-2 text-[0.875rem] font-semibold text-blue hover:underline"
+          className="mt-8 inline-flex items-center gap-2 text-[0.875rem] font-semibold text-blue-lift hover:underline"
         >
           Back to the site
         </Link>

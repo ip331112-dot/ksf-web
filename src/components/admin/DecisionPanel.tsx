@@ -86,7 +86,7 @@ export function DecisionPanel({
           type="button"
           onClick={begin}
           disabled={pending}
-          className="mt-4 inline-flex w-full items-center justify-center gap-2 border border-line px-4 py-2.5 text-[0.85rem] font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue disabled:opacity-50"
+          className="mt-4 inline-flex w-full items-center justify-center gap-2 border border-line px-4 py-2.5 text-[0.85rem] font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue-lift disabled:opacity-50"
         >
           <PlayCircle size={15} aria-hidden="true" />
           Mark as in review
@@ -109,7 +109,7 @@ export function DecisionPanel({
               "border px-2 py-2 text-[0.8rem] font-semibold transition-colors " +
               (choice === d
                 ? `${TONE[d]} bg-surface-2`
-                : "border-line text-ink-dim hover:border-blue hover:text-blue")
+                : "border-line text-ink-dim hover:border-blue hover:text-blue-lift")
             }
           >
             {DECISION_LABELS[d]}
@@ -129,7 +129,7 @@ export function DecisionPanel({
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
         placeholder="What you saw in their application, and what you would suggest next — in your own words."
-        className="mt-1.5 w-full resize-y border border-line bg-surface px-3 py-2.5 text-[0.85rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30"
+        className="mt-1.5 w-full resize-y border border-field bg-surface px-3 py-2.5 text-[0.85rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30"
       />
       <p className="mt-1 text-right font-mono text-[0.65rem] text-ink-faint">
         {feedback.trim().length} characters

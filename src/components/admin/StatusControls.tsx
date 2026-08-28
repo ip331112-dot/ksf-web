@@ -66,7 +66,7 @@ export function StatusControls({
                 "inline-flex items-center gap-1.5 border px-2.5 py-1 text-[0.75rem] font-semibold transition-colors " +
                 (isCurrent
                   ? `${active} cursor-default`
-                  : "border-line text-ink-dim hover:border-blue hover:text-blue disabled:opacity-50")
+                  : "border-line text-ink-dim hover:border-blue hover:text-blue-lift disabled:opacity-50")
               }
             >
               {isBusy ? (

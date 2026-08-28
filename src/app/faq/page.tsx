@@ -39,14 +39,14 @@ export default function FaqPage() {
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue">FAQ</span>
+            <span className="eyebrow text-blue-lift">FAQ</span>
             <h1 className="mt-3 max-w-2xl text-4xl font-extrabold text-balance text-navy sm:text-5xl">
               Questions, answered plainly
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-ink-dim">
               Including the ones that are awkward for us. If something here is
               unclear,{" "}
-              <Link href="/contact" className="font-semibold text-blue hover:underline">
+              <Link href="/contact" className="font-semibold text-blue-lift hover:underline">
                 ask us directly
               </Link>
               .
@@ -60,7 +60,7 @@ export default function FaqPage() {
               <a
                 key={g.id}
                 href={`#${g.id}`}
-                className="border border-line px-3 py-1.5 text-[0.8rem] font-medium text-ink-dim transition-colors hover:border-blue hover:text-blue"
+                className="border border-line px-3 py-1.5 text-[0.8rem] font-medium text-ink-dim transition-colors hover:border-blue hover:text-blue-lift"
               >
                 {g.title}
               </a>

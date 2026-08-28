@@ -40,7 +40,7 @@ type Props = {
 };
 
 const field =
-  "w-full border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30";
+  "w-full border border-field bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30";
 
 export function ApplyFlow({
   courseSlug,
@@ -495,7 +495,7 @@ export function ApplyFlow({
           type="button"
           onClick={onBack}
           disabled={step === 0 || pending}
-          className="inline-flex items-center gap-1.5 border border-line px-4 py-2.5 text-[0.875rem] font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue disabled:invisible"
+          className="inline-flex items-center gap-1.5 border border-line px-4 py-2.5 text-[0.875rem] font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue-lift disabled:invisible"
         >
           <ArrowLeft size={15} aria-hidden="true" />
           Back

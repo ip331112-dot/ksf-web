@@ -53,7 +53,7 @@ function LoginForm() {
           autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30"
+          className="border border-field bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30"
         />
       </div>
 
@@ -68,7 +68,7 @@ function LoginForm() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30"
+          className="border border-field bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30"
         />
       </div>
 
@@ -103,7 +103,7 @@ export default function AdminLoginPage() {
 
         <div className="border border-line bg-surface p-7">
           <div className="mb-5 flex items-center gap-2">
-            <ShieldCheck size={17} className="text-blue" aria-hidden="true" />
+            <ShieldCheck size={17} className="text-blue-lift" aria-hidden="true" />
             <h1 className="font-display text-lg font-extrabold text-navy">
               Staff sign in
             </h1>

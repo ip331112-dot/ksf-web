@@ -31,23 +31,24 @@ export function KsfMark({ className, mono = false, title }: Props) {
       {!mono && (
         <defs>
           <linearGradient id={gradId} x1="104" y1="40" x2="34" y2="104" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#1E9BFF" />
-            <stop offset="55%" stopColor="#0B63E5" />
-            <stop offset="100%" stopColor="#132B5E" />
+            <stop offset="0%" stopColor="#FF4D63" />
+            <stop offset="55%" stopColor="#E01E37" />
+            <stop offset="100%" stopColor="#8E1224" />
           </linearGradient>
         </defs>
       )}
 
-      {/* Navy arc — the long sweep, gap left at the upper right */}
+      {/* Long sweep, gap at the upper right. Light on the dark ground —
+          the counterpart to the accent arc, not a colour of its own. */}
       <path
         d="M 107.8 55.8 A 48 48 0 1 1 72.4 13.6"
-        stroke={mono ? "currentColor" : "#0A1B3D"}
+        stroke={mono ? "currentColor" : "#E7EAEF"}
         strokeWidth="11"
         strokeLinecap="round"
         opacity={mono ? 0.55 : 1}
       />
 
-      {/* Blue arc — overlays the right and lower sweep */}
+      {/* Accent arc — overlays the right and lower sweep */}
       <path
         d="M 105.1 43.6 A 48 48 0 0 1 36 101.6"
         stroke={mono ? "currentColor" : `url(#${gradId})`}
@@ -56,7 +57,7 @@ export function KsfMark({ className, mono = false, title }: Props) {
       />
 
       {/* Pixel dissolve — squares scattering out of the ring gap */}
-      <g fill={mono ? "currentColor" : "#0B63E5"}>
+      <g fill={mono ? "currentColor" : "#E01E37"}>
         <rect x="83" y="7" width="6.5" height="6.5" />
         <rect x="94.5" y="14.5" width="5" height="5" />
         <rect x="92.5" y="1.5" width="4" height="4" />

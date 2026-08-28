@@ -33,7 +33,7 @@ export function KsfLogo({
             dark ? "text-white" : "text-navy"
           }`}
         >
-          <span className={dark ? "text-blue-lift" : "text-blue"}>KSF</span> TECH SERVICES
+          <span className={dark ? "text-blue-lift" : "text-blue-lift"}>KSF</span> TECH SERVICES
         </span>
         {showTagline && (
           <span

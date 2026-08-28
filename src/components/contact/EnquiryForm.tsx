@@ -25,7 +25,7 @@ type Props = {
 };
 
 const field =
-  "border border-line bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30 disabled:bg-surface-2 disabled:text-ink-faint";
+  "border border-field bg-surface px-3.5 py-2.5 text-[0.9rem] outline-none focus-visible:border-blue focus-visible:ring-2 focus-visible:ring-blue/30 disabled:bg-surface-2 disabled:text-ink-faint";
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
@@ -63,7 +63,7 @@ export function EnquiryForm({
           message and lose it. Please email{" "}
           <a
             href={`mailto:${SITE.email}`}
-            className="font-semibold text-blue hover:underline"
+            className="font-semibold text-blue-lift hover:underline"
           >
             {SITE.email}
           </a>{" "}
@@ -78,7 +78,7 @@ export function EnquiryForm({
       <div className="mt-5 flex gap-3 border-2 border-blue bg-blue/5 p-5">
         <CheckCircle2
           size={20}
-          className="mt-0.5 shrink-0 text-blue"
+          className="mt-0.5 shrink-0 text-blue-lift"
           aria-hidden="true"
         />
         <div>

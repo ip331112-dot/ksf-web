@@ -27,7 +27,7 @@ export default function PricingPage() {
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue">Pricing</span>
+            <span className="eyebrow text-blue-lift">Pricing</span>
             <h1 className="mt-3 max-w-2xl text-4xl font-extrabold text-balance text-navy sm:text-5xl">
               One price, every track
             </h1>
@@ -42,7 +42,7 @@ export default function PricingPage() {
           <div className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
             {/* The card */}
             <div className="h-fit border-2 border-blue bg-surface p-7">
-              <p className="eyebrow text-blue">All-access</p>
+              <p className="eyebrow text-blue-lift">All-access</p>
               <p className="mt-3 flex items-baseline gap-1.5">
                 <span className="font-display text-5xl font-extrabold text-navy">
                   £{PRICE_GBP}
@@ -142,7 +142,7 @@ export default function PricingPage() {
           </div>
           <p className="mt-6 text-sm text-ink-dim">
             More in the{" "}
-            <Link href="/faq" className="font-semibold text-blue hover:underline">
+            <Link href="/faq" className="font-semibold text-blue-lift hover:underline">
               full FAQ
             </Link>
             .

@@ -17,7 +17,7 @@ export const DECISION_LABELS: Record<Decision, string> = {
 /** Status pill styling, covering every value the enum can hold. */
 export const STATUS_STYLES: Record<string, string> = {
   payment_pending: "border-warn text-warn bg-warn/10",
-  submitted: "border-blue text-blue bg-blue-soft",
+  submitted: "border-blue text-blue-lift bg-blue-soft",
   in_review: "border-navy-2 text-navy bg-surface-2",
   accepted: "border-ok text-ok bg-ok-soft",
   waitlisted: "border-warn text-warn bg-warn/10",

@@ -16,15 +16,24 @@ export function SiteHeader() {
 
         {/* Desktop nav */}
         <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-[0.925rem] font-medium text-ink-dim transition-colors hover:text-blue"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {NAV.map((item) => {
+            const staff = "staff" in item && item.staff;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={
+                  staff
+                    ? // Quieter, and set off by a rule: it is a door for
+                      // KSF, not a page a customer wants.
+                      "border-l border-line pl-7 text-[0.85rem] font-medium text-ink-faint transition-colors hover:text-blue-lift"
+                    : "text-[0.925rem] font-medium text-ink-dim transition-colors hover:text-blue-lift"
+                }
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -57,17 +66,24 @@ export function SiteHeader() {
           className="border-t border-line bg-surface lg:hidden"
         >
           <ul className="mx-auto max-w-6xl px-5 py-2">
-            {NAV.map((item) => (
-              <li key={item.href} className="border-b border-line-soft last:border-0">
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block py-3.5 font-medium text-ink"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {NAV.map((item) => {
+              const staff = "staff" in item && item.staff;
+              return (
+                <li key={item.href} className="border-b border-line-soft last:border-0">
+                  <Link
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={
+                      staff
+                        ? "block py-3.5 text-[0.9rem] font-medium text-ink-faint"
+                        : "block py-3.5 font-medium text-ink"
+                    }
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       )}

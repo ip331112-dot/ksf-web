@@ -27,7 +27,7 @@ export default function ContactPage() {
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue">Contact</span>
+            <span className="eyebrow text-blue-lift">Contact</span>
             <h1 className="mt-3 max-w-2xl text-4xl font-extrabold text-balance text-navy sm:text-5xl">
               Talk to us
             </h1>
@@ -62,37 +62,37 @@ export default function ContactPage() {
                 </p>
                 <ul className="mt-4 flex flex-col gap-3 text-[0.875rem]">
                   <li className="flex items-center gap-2.5">
-                    <Mail size={15} className="shrink-0 text-blue" aria-hidden="true" />
-                    <a href={`mailto:${SITE.email}`} className="text-ink-dim hover:text-blue">
+                    <Mail size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
+                    <a href={`mailto:${SITE.email}`} className="text-ink-dim hover:text-blue-lift">
                       {SITE.email}
                     </a>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <Mail size={15} className="shrink-0 text-blue" aria-hidden="true" />
-                    <a href={`mailto:${SITE.emailAlt}`} className="text-ink-dim hover:text-blue">
+                    <Mail size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
+                    <a href={`mailto:${SITE.emailAlt}`} className="text-ink-dim hover:text-blue-lift">
                       {SITE.emailAlt}
                     </a>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <Phone size={15} className="shrink-0 text-blue" aria-hidden="true" />
+                    <Phone size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
                     <a
                       href={`tel:${SITE.phoneUk.replace(/\s/g, "")}`}
-                      className="text-ink-dim hover:text-blue"
+                      className="text-ink-dim hover:text-blue-lift"
                     >
                       {SITE.phoneUk} <span className="text-ink-faint">(UK)</span>
                     </a>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <Phone size={15} className="shrink-0 text-blue" aria-hidden="true" />
+                    <Phone size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
                     <a
                       href={`tel:${SITE.phoneFr.replace(/\s/g, "")}`}
-                      className="text-ink-dim hover:text-blue"
+                      className="text-ink-dim hover:text-blue-lift"
                     >
                       {SITE.phoneFr} <span className="text-ink-faint">(FR)</span>
                     </a>
                   </li>
                   <li className="flex items-center gap-2.5 text-ink-dim">
-                    <Globe size={15} className="shrink-0 text-blue" aria-hidden="true" />
+                    <Globe size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
                     {SITE.coverage}
                   </li>
                 </ul>

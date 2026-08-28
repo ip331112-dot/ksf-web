@@ -33,7 +33,7 @@ export default function AboutPage() {
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue">About</span>
+            <span className="eyebrow text-blue-lift">About</span>
             <h1 className="mt-3 max-w-3xl text-4xl font-extrabold text-balance text-navy sm:text-5xl">
               A working security firm that teaches
             </h1>
@@ -115,31 +115,31 @@ export default function AboutPage() {
                 <h2 className="font-display font-semibold text-navy">Reach us</h2>
                 <ul className="mt-3 flex flex-col gap-2.5 text-[0.875rem] text-ink-dim">
                   <li className="flex items-center gap-2.5">
-                    <Mail size={15} className="shrink-0 text-blue" aria-hidden="true" />
-                    <a href={`mailto:${SITE.email}`} className="hover:text-blue">
+                    <Mail size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
+                    <a href={`mailto:${SITE.email}`} className="hover:text-blue-lift">
                       {SITE.email}
                     </a>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <Phone size={15} className="shrink-0 text-blue" aria-hidden="true" />
+                    <Phone size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
                     <a
                       href={`tel:${SITE.phoneUk.replace(/\s/g, "")}`}
-                      className="hover:text-blue"
+                      className="hover:text-blue-lift"
                     >
                       {SITE.phoneUk} <span className="text-ink-faint">(UK)</span>
                     </a>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <Phone size={15} className="shrink-0 text-blue" aria-hidden="true" />
+                    <Phone size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
                     <a
                       href={`tel:${SITE.phoneFr.replace(/\s/g, "")}`}
-                      className="hover:text-blue"
+                      className="hover:text-blue-lift"
                     >
                       {SITE.phoneFr} <span className="text-ink-faint">(FR)</span>
                     </a>
                   </li>
                   <li className="flex items-center gap-2.5">
-                    <Globe size={15} className="shrink-0 text-blue" aria-hidden="true" />
+                    <Globe size={15} className="shrink-0 text-blue-lift" aria-hidden="true" />
                     {SITE.coverage}
                   </li>
                 </ul>

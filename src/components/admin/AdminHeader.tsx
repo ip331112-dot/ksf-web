@@ -30,7 +30,7 @@ export function AdminHeader({
   );
 
   return (
-    <header className="border-b border-line bg-navy">
+    <header className="border-b border-line bg-band">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-3.5 lg:px-8">
         <div className="flex items-center gap-5">
           <KsfLogo tone="dark" href="/admin" />

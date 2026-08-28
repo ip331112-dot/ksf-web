@@ -50,9 +50,9 @@ export default async function TrackPage({ params }: Params) {
         {/* 01 · Breadcrumb */}
         <nav aria-label="Breadcrumb" className="border-b border-line bg-surface-2">
           <ol className="mx-auto flex max-w-6xl gap-2 px-5 py-3 font-mono text-[0.72rem] text-ink-faint lg:px-8">
-            <li><Link href="/" className="hover:text-blue">Home</Link></li>
+            <li><Link href="/" className="hover:text-blue-lift">Home</Link></li>
             <li aria-hidden>›</li>
-            <li><Link href="/tracks" className="hover:text-blue">Tracks</Link></li>
+            <li><Link href="/tracks" className="hover:text-blue-lift">Tracks</Link></li>
             <li aria-hidden>›</li>
             <li className="text-ink" aria-current="page">{track.shortName}</li>
           </ol>
@@ -79,14 +79,14 @@ export default async function TrackPage({ params }: Params) {
 
               <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-line pt-6">
                 <div className="flex items-center gap-2.5">
-                  <BarChart3 size={17} className="text-blue" />
+                  <BarChart3 size={17} className="text-blue-lift" />
                   <div>
                     <dt className="eyebrow text-ink-faint">Level</dt>
                     <dd className="text-[0.9rem] font-medium text-navy">{track.level}</dd>
                   </div>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Clock size={17} className="text-blue" />
+                  <Clock size={17} className="text-blue-lift" />
                   <div>
                     <dt className="eyebrow text-ink-faint">Guided hours</dt>
                     <dd className="tabular text-[0.9rem] font-medium text-navy">
@@ -95,7 +95,7 @@ export default async function TrackPage({ params }: Params) {
                   </div>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <BadgeCheck size={17} className="text-blue" />
+                  <BadgeCheck size={17} className="text-blue-lift" />
                   <div>
                     <dt className="eyebrow text-ink-faint">Response</dt>
                     <dd className="text-[0.9rem] font-medium text-navy">
@@ -162,7 +162,7 @@ export default async function TrackPage({ params }: Params) {
               <ul className="mt-3 flex flex-col gap-2">
                 {track.prerequisites.map((p) => (
                   <li key={p} className="flex items-start gap-2.5 text-[0.925rem]">
-                    <Check size={15} className="mt-1.5 shrink-0 text-blue" />
+                    <Check size={15} className="mt-1.5 shrink-0 text-blue-lift" />
                     <span className="text-ink-dim">{p}</span>
                   </li>
                 ))}
@@ -192,7 +192,7 @@ export default async function TrackPage({ params }: Params) {
                       <span className="font-display text-[1rem] font-semibold text-navy">
                         {d.title}
                       </span>
-                      <span className="tabular shrink-0 font-mono text-[0.75rem] text-blue">
+                      <span className="tabular shrink-0 font-mono text-[0.75rem] text-blue-lift">
                         {d.weight}
                       </span>
                     </span>
@@ -255,7 +255,7 @@ export default async function TrackPage({ params }: Params) {
                       <h3 className="mt-2 font-display font-semibold text-navy">
                         {t.shortName}
                       </h3>
-                      <span className="mt-3 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue">
+                      <span className="mt-3 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue-lift">
                         View track
                         <ArrowRight
                           size={13}

@@ -145,4 +145,10 @@ export const NAV = [
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  /**
+   * Staff sign-in, at the owner's request. Set apart visually because it
+   * is for KSF, not for visitors — a customer clicking it should be able
+   * to tell it is not for them before they arrive.
+   */
+  { href: "/admin", label: "Staff login", staff: true },
 ] as const;
