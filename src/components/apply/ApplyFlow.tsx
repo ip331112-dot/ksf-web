@@ -26,10 +26,13 @@ import {
 import {
   EXPERIENCE_LEVELS,
   STEPS,
-  STEP_SCHEMAS,
+  stepSchemas,
   type ApplyDraft,
   type ApplyErrors,
 } from "@/lib/applications/schema";
+import type { Dictionary } from "@/lib/i18n/dictionary";
+import { useLocale } from "@/lib/i18n/useLocale";
+import { fill } from "@/lib/locale";
 
 type Props = {
   courseSlug: string;
@@ -38,6 +41,16 @@ type Props = {
   paymentRequired: boolean;
   /** Absent when Turnstile is not configured; the widget is then skipped. */
   turnstileSiteKey?: string;
+  /**
+   * The apply and error strings.
+   *
+   * This form needs whole sections rather than the narrowed set the
+   * enquiry form gets: the step schemas are rebuilt in the browser for
+   * per-step validation, and between them they reach for most of the
+   * error messages. Both sections are small and neither carries copy
+   * belonging to any other page.
+   */
+  t: Pick<Dictionary, "apply" | "errors">;
 };
 
 const field =
@@ -49,9 +62,11 @@ export function ApplyFlow({
   priceGbp,
   paymentRequired,
   turnstileSiteKey,
+  t,
 }: Props) {
   const router = useRouter();
   const localised = useLocalisedPath();
+  const locale = useLocale();
   const uid = useId();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<ApplyErrors>({});
@@ -73,6 +88,10 @@ export function ApplyFlow({
   );
   const draft = useMemo(() => parseDraft(raw), [raw]);
 
+  // Rebuilt only when the language changes, not on every keystroke —
+  // each call constructs four zod schemas.
+  const schemas = useMemo(() => stepSchemas(t), [t]);
+
   // Moving between steps changes what the page is about, so send focus to
   // the new heading — otherwise a screen reader stays silent and a
   // keyboard user is stranded at the bottom of the previous step.
@@ -86,7 +105,7 @@ export function ApplyFlow({
   };
 
   function validateStep(index: number): boolean {
-    const schema = STEP_SCHEMAS[index];
+    const schema = schemas[index];
     const slice: Record<string, unknown> =
       index === 0
         ? { name: draft.name, email: draft.email, phone: draft.phone, country: draft.country }
@@ -142,6 +161,9 @@ export function ApplyFlow({
       const res = await submitApplication({
         ...draft,
         courseSlug,
+        // The action cannot read root-params, so the language the
+        // applicant is reading travels with the submission.
+        locale,
         weeklyHours: draft.weeklyHours === "" ? "" : draft.weeklyHours,
         company: honeypotRef.current?.value ?? "",
         turnstileToken,
@@ -164,11 +186,13 @@ export function ApplyFlow({
   }
 
   const current = STEPS[step];
+  const stepTitle = t.apply.steps[current.key];
+  const stepBlurb = t.apply.steps[`${current.key}Blurb` as const];
 
   return (
     <div className="mt-8">
       {/* Progress */}
-      <ol className="flex flex-wrap gap-x-2 gap-y-2" aria-label="Application progress">
+      <ol className="flex flex-wrap gap-x-2 gap-y-2" aria-label={t.apply.progress}>
         {STEPS.map((s, i) => {
           const done = i < step;
           const active = i === step;
@@ -193,7 +217,7 @@ export function ApplyFlow({
                   (active ? "text-navy" : done ? "text-ok" : "text-ink-faint")
                 }
               >
-                {s.title}
+                {t.apply.steps[s.key]}
               </span>
             </li>
           );
@@ -206,9 +230,9 @@ export function ApplyFlow({
           tabIndex={-1}
           className="font-display text-xl font-extrabold text-navy outline-none"
         >
-          {current.title}
+          {stepTitle}
         </h2>
-        <p className="mt-1 text-[0.875rem] text-ink-dim">{current.blurb}</p>
+        <p className="mt-1 text-[0.875rem] text-ink-dim">{stepBlurb}</p>
       </div>
 
       {formError && (
@@ -223,7 +247,7 @@ export function ApplyFlow({
       <div className="mt-5 flex flex-col gap-4">
         {step === 0 && (
           <>
-            <Field id={`${uid}-name`} label="Full name" error={errors.name}>
+            <Field id={`${uid}-name`} label={t.apply.fields.fullName} error={errors.name}>
               <input
                 id={`${uid}-name`}
                 className={field}
@@ -232,7 +256,7 @@ export function ApplyFlow({
                 onChange={(e) => set("name", e.target.value)}
               />
             </Field>
-            <Field id={`${uid}-email`} label="Email" error={errors.email}>
+            <Field id={`${uid}-email`} label={t.apply.fields.email} error={errors.email}>
               <input
                 id={`${uid}-email`}
                 type="email"
@@ -243,7 +267,7 @@ export function ApplyFlow({
               />
             </Field>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field id={`${uid}-phone`} label="Phone" hint="optional" error={errors.phone}>
+              <Field id={`${uid}-phone`} label={t.apply.fields.phone} hint={t.apply.fields.optional} error={errors.phone}>
                 <input
                   id={`${uid}-phone`}
                   type="tel"
@@ -253,7 +277,7 @@ export function ApplyFlow({
                   onChange={(e) => set("phone", e.target.value)}
                 />
               </Field>
-              <Field id={`${uid}-country`} label="Country" hint="optional" error={errors.country}>
+              <Field id={`${uid}-country`} label={t.apply.fields.country} hint={t.apply.fields.optional} error={errors.country}>
                 <input
                   id={`${uid}-country`}
                   className={field}
@@ -270,16 +294,16 @@ export function ApplyFlow({
           <>
             <Field
               id={`${uid}-level`}
-              label="Where are you starting from?"
+              label={t.apply.fields.startingPoint}
               error={errors.experienceLevel}
             >
               <div className="flex flex-col gap-2">
-                {EXPERIENCE_LEVELS.map((l) => (
+                {EXPERIENCE_LEVELS.map((level) => (
                   <label
-                    key={l.value}
+                    key={level}
                     className={
                       "flex cursor-pointer items-center gap-2.5 border px-3.5 py-2.5 text-[0.875rem] " +
-                      (draft.experienceLevel === l.value
+                      (draft.experienceLevel === level
                         ? "border-blue bg-blue-soft text-navy"
                         : "border-line text-ink-dim hover:border-blue")
                     }
@@ -287,20 +311,20 @@ export function ApplyFlow({
                     <input
                       type="radio"
                       name={`${uid}-level`}
-                      value={l.value}
-                      checked={draft.experienceLevel === l.value}
-                      onChange={() => set("experienceLevel", l.value)}
+                      value={level}
+                      checked={draft.experienceLevel === level}
+                      onChange={() => set("experienceLevel", level)}
                       className="accent-blue"
                     />
-                    {l.label}
+                    {t.apply.levels[level]}
                   </label>
                 ))}
               </div>
             </Field>
             <Field
               id={`${uid}-occupation`}
-              label="What do you do at the moment?"
-              hint="optional"
+              label={t.apply.fields.occupation}
+              hint={t.apply.fields.optional}
               error={errors.occupation}
             >
               <input
@@ -312,8 +336,8 @@ export function ApplyFlow({
             </Field>
             <Field
               id={`${uid}-background`}
-              label="Any relevant background"
-              hint="optional"
+              label={t.apply.fields.background}
+              hint={t.apply.fields.optional}
               error={errors.background}
             >
               <textarea
@@ -331,7 +355,7 @@ export function ApplyFlow({
           <>
             <Field
               id={`${uid}-motivation`}
-              label={`Why ${trackName}?`}
+              label={fill(t.apply.fields.whyTrack, { track: trackName })}
               error={errors.motivation}
             >
               <textarea
@@ -344,8 +368,8 @@ export function ApplyFlow({
             </Field>
             <Field
               id={`${uid}-goals`}
-              label="What are you hoping it leads to?"
-              hint="optional"
+              label={t.apply.fields.goals}
+              hint={t.apply.fields.optional}
               error={errors.goals}
             >
               <textarea
@@ -358,8 +382,8 @@ export function ApplyFlow({
             </Field>
             <Field
               id={`${uid}-hours`}
-              label="Hours a week you can give it"
-              hint="optional"
+              label={t.apply.fields.weeklyHours}
+              hint={t.apply.fields.optional}
               error={errors.weeklyHours}
             >
               <input
@@ -378,43 +402,54 @@ export function ApplyFlow({
         {step === 3 && (
           <>
             <dl className="divide-y divide-line border border-line bg-surface-2">
-              <Row label="Track" value={trackName} />
-              <Row label="Name" value={draft.name} />
-              <Row label="Email" value={draft.email} />
-              {draft.phone && <Row label="Phone" value={draft.phone} />}
-              {draft.country && <Row label="Country" value={draft.country} />}
+              <Row label={t.apply.review.track} value={trackName} />
+              <Row label={t.apply.review.name} value={draft.name} />
+              <Row label={t.apply.review.email} value={draft.email} />
+              {draft.phone && (
+                <Row label={t.apply.review.phone} value={draft.phone} />
+              )}
+              {draft.country && (
+                <Row label={t.apply.review.country} value={draft.country} />
+              )}
               <Row
-                label="Experience"
+                label={t.apply.review.experience}
                 value={
-                  EXPERIENCE_LEVELS.find((l) => l.value === draft.experienceLevel)?.label ?? "—"
+                  draft.experienceLevel in t.apply.levels
+                    ? t.apply.levels[
+                        draft.experienceLevel as keyof typeof t.apply.levels
+                      ]
+                    : "—"
                 }
               />
-              {draft.occupation && <Row label="Occupation" value={draft.occupation} />}
-              {draft.background && <Row label="Background" value={draft.background} />}
-              <Row label="Motivation" value={draft.motivation} />
-              {draft.goals && <Row label="Goals" value={draft.goals} />}
-              {draft.weeklyHours && <Row label="Hours a week" value={String(draft.weeklyHours)} />}
+              {draft.occupation && (
+                <Row label={t.apply.review.occupation} value={draft.occupation} />
+              )}
+              {draft.background && (
+                <Row label={t.apply.review.background} value={draft.background} />
+              )}
+              <Row label={t.apply.review.motivation} value={draft.motivation} />
+              {draft.goals && (
+                <Row label={t.apply.review.goals} value={draft.goals} />
+              )}
+              {draft.weeklyHours && (
+                <Row
+                  label={t.apply.review.hours}
+                  value={String(draft.weeklyHours)}
+                />
+              )}
             </dl>
 
             <div className="border-2 border-blue bg-blue/5 p-4">
-              {paymentRequired ? (
-                <p className="text-[0.875rem] leading-relaxed text-navy">
-                  <strong className="font-semibold">
-                    £{priceGbp}/month starts today.
-                  </strong>{" "}
-                  If we cannot offer you a place, your subscription is cancelled
-                  and refunded in full, automatically.
-                </p>
-              ) : (
-                <p className="text-[0.875rem] leading-relaxed text-navy">
-                  <strong className="font-semibold">
-                    You will not be charged anything now.
-                  </strong>{" "}
-                  Applying is free. If we offer you a place, we will send you a
-                  link to start the £{priceGbp}/month subscription — you decide
-                  then.
-                </p>
-              )}
+              <p className="text-[0.875rem] leading-relaxed text-navy">
+                <strong className="font-semibold">
+                  {paymentRequired
+                    ? fill(t.apply.paidNotice, { price: priceGbp })
+                    : t.apply.freeNotice}
+                </strong>{" "}
+                {paymentRequired
+                  ? t.apply.paidBody
+                  : fill(t.apply.freeBody, { price: priceGbp })}
+              </p>
             </div>
 
             <Field id={`${uid}-terms`} label="" error={errors.agreedTerms}>
@@ -425,10 +460,7 @@ export function ApplyFlow({
                   checked={draft.agreedTerms}
                   onChange={(e) => set("agreedTerms", e.target.checked)}
                 />
-                <span>
-                  I have read the terms and the refund policy, and the answers
-                  above are my own.
-                </span>
+                <span>{t.apply.agreeTerms}</span>
               </label>
             </Field>
 
@@ -440,10 +472,7 @@ export function ApplyFlow({
                   checked={draft.agreedImmediateStart}
                   onChange={(e) => set("agreedImmediateStart", e.target.checked)}
                 />
-                <span>
-                  I agree the service starts immediately, and I understand this
-                  affects my 14-day cancellation right.
-                </span>
+                <span>{t.apply.agreeImmediate}</span>
               </label>
             )}
 
@@ -457,7 +486,7 @@ export function ApplyFlow({
               aria-hidden="true"
               className="absolute left-[-9999px] h-0 w-0 overflow-hidden"
             >
-              <label htmlFor={`${uid}-company`}>Company</label>
+              <label htmlFor={`${uid}-company`}>{t.apply.company}</label>
               <input
                 ref={honeypotRef}
                 id={`${uid}-company`}
@@ -500,7 +529,7 @@ export function ApplyFlow({
           className="inline-flex items-center gap-1.5 border border-line px-4 py-2.5 text-[0.875rem] font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue-lift disabled:invisible"
         >
           <ArrowLeft size={15} aria-hidden="true" />
-          Back
+          {t.apply.back}
         </button>
 
         {step < STEPS.length - 1 ? (
@@ -509,7 +538,7 @@ export function ApplyFlow({
             onClick={onNext}
             className="inline-flex items-center gap-2 bg-blue px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-lift"
           >
-            Continue
+            {t.apply.continue}
             <ArrowRight size={16} aria-hidden="true" />
           </button>
         ) : (
@@ -520,14 +549,13 @@ export function ApplyFlow({
             className="inline-flex items-center gap-2 bg-blue px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-lift disabled:cursor-not-allowed disabled:bg-ink-faint"
           >
             {pending && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
-            {pending ? "Submitting…" : "Submit application"}
+            {pending ? t.apply.submitting : t.apply.submit}
           </button>
         )}
       </div>
 
       <p className="mt-3 text-[0.75rem] text-ink-faint">
-        Your answers are saved on this device as you go, so you can come back
-        to them.
+        {t.apply.savedLocally}
       </p>
     </div>
   );

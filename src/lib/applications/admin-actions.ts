@@ -240,6 +240,18 @@ export async function recordDecision(
    */
   const statusPath = await mintStatusPath(parsed.data.applicationId);
 
+  /**
+   * KNOWN GAP: this email is always English.
+   *
+   * The confirmation sent at submission time is translated, because the
+   * apply flow hands its locale straight to the action. A decision is
+   * made days later by staff, and `applications` has no column recording
+   * the language the person applied in — so there is nothing to pass as
+   * `locale` here. Closing this needs a migration adding
+   * `applications.locale`, the insert in actions.ts setting it, and this
+   * call reading it back. Until then a French applicant gets a French
+   * confirmation and an English decision.
+   */
   const mail = await sendDecision({
     name: app.name,
     email: app.email,

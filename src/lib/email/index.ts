@@ -2,6 +2,8 @@ import "server-only";
 import { SITE } from "@/content/site";
 import { getTrack } from "@/content/tracks";
 import type { EnquiryInput } from "@/lib/leads/schema";
+import { loadDictionaryFor, type Dictionary } from "@/lib/i18n/dictionary";
+import { fill } from "@/lib/locale";
 import { baseUrl, isEmailConfigured, send, type SendResult } from "./send";
 
 export { isEmailConfigured } from "./send";
@@ -72,6 +74,14 @@ export type ApplicationMail = {
   courseSlug: string;
   /** Raw token path, e.g. /status/abc123. Empty if none was issued. */
   statusPath: string;
+  /**
+   * The language the applicant applied in.
+   *
+   * Applicant-facing mail is written in it. The staff alert below stays
+   * in English deliberately — it goes to KSF, not to the applicant, and
+   * translating an internal notification only makes it harder to scan.
+   */
+  locale?: string;
 };
 
 /**
@@ -85,44 +95,50 @@ export type ApplicationMail = {
 export async function sendApplicationReceived(
   app: ApplicationMail,
 ): Promise<SendResult> {
+  const t: Dictionary = await loadDictionaryFor(app.locale);
   const track = getTrack(app.courseSlug);
   const trackName = track?.name ?? app.courseSlug;
   const statusUrl = app.statusPath ? `${baseUrl()}${app.statusPath}` : null;
   const firstName = app.name.split(" ")[0];
 
+  const e = t.email;
+  const responseTime = t.common.responseTime;
+
   const text = [
-    `Hello ${firstName},`,
+    fill(e.greeting, { firstName }),
     "",
-    `We have your application for ${trackName}.`,
+    fill(e.haveApplication, { track: trackName }),
     "",
-    `Your reference is ${app.reference}. Quote it if you contact us.`,
+    fill(e.quoteReference, { reference: app.reference }),
     "",
     statusUrl
-      ? `Check your application at any time:\n${statusUrl}\n\nThat link is private to you — treat it like a password. Keep this email; we cannot recover the link, only issue a new one.`
-      : `We could not create your status link. Email ${SITE.email} with your reference and we will send you one.`,
+      ? `${e.checkAnyTime}\n${statusUrl}\n\n${e.linkPrivate}`
+      : fill(e.noLink, { email: SITE.email }),
     "",
-    `What happens next: a person reads your application in full, and we reply within ${SITE.responseTime} with a decision and written feedback — whichever way it goes.`,
+    fill(e.whatNext, { responseTime }),
     "",
     signOff,
   ].join("\n");
 
   const html = wrap(`
-<p style="margin:0 0 16px">Hello ${firstName},</p>
-<p style="margin:0 0 16px">We have your application for <strong>${trackName}</strong>.</p>
-<p style="margin:0 0 8px;font-size:13px;color:#53638a">Your reference</p>
+<p style="margin:0 0 16px">${fill(e.greeting, { firstName })}</p>
+<p style="margin:0 0 16px">${fill(e.haveApplication, { track: `<strong>${trackName}</strong>` })}</p>
+<p style="margin:0 0 8px;font-size:13px;color:#53638a">${e.yourReference}</p>
 <p style="margin:0 0 20px;font-family:ui-monospace,Consolas,monospace;font-size:20px;font-weight:700;letter-spacing:.04em">${app.reference}</p>
 ${
   statusUrl
-    ? `<p style="margin:0 0 8px">Check your application at any time:</p>
+    ? `<p style="margin:0 0 8px">${e.checkAnyTime}</p>
 <p style="margin:0 0 8px"><a href="${statusUrl}" style="color:#c8102e;word-break:break-all">${statusUrl}</a></p>
-<p style="margin:0 0 20px;font-size:13px;color:#53638a">That link is private to you — treat it like a password. Keep this email: we cannot recover the link, only issue a new one.</p>`
-    : `<p style="margin:0 0 20px">We could not create your status link. Email <a href="mailto:${SITE.email}" style="color:#c8102e">${SITE.email}</a> with your reference and we will send you one.</p>`
+<p style="margin:0 0 20px;font-size:13px;color:#53638a">${e.linkPrivate}</p>`
+    : `<p style="margin:0 0 20px">${fill(e.noLink, {
+        email: `<a href="mailto:${SITE.email}" style="color:#c8102e">${SITE.email}</a>`,
+      })}</p>`
 }
-<p style="margin:0 0 16px">A person reads your application in full, and we reply within ${SITE.responseTime} with a decision and written feedback — whichever way it goes.</p>`);
+<p style="margin:0 0 16px">${fill(e.whatNext, { responseTime })}</p>`);
 
   return send({
     to: app.email,
-    subject: `Application received — ${app.reference}`,
+    subject: fill(e.receivedSubject, { reference: app.reference }),
     text,
     html,
     replyTo: SITE.email,

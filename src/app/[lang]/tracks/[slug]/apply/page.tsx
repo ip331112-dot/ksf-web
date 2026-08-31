@@ -5,8 +5,9 @@ import { ArrowLeft, BadgeCheck, Check } from "lucide-react";
 import { KsfLogo } from "@/components/brand/KsfLogo";
 import { ApplyFlow } from "@/components/apply/ApplyFlow";
 import { applyRequiresPayment } from "@/lib/applications/actions";
-import { SITE } from "@/content/site";
 import { TRACKS, getTrack, INCLUDED, PRICE_GBP } from "@/content/tracks";
+import { getDictionary } from "../../../dictionaries";
+import { fill } from "@/lib/locale";
 
 /**
  * The application flow.
@@ -27,9 +28,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const track = getTrack(slug);
   if (!track) return {};
 
+  const t = await getDictionary();
+
   return {
-    title: `Apply — ${track.shortName}`,
-    description: `Apply for the ${track.name} track with KSF Tech Services.`,
+    title: fill(t.meta.applyTitle, { track: track.shortName }),
+    description: fill(t.meta.applyDescription, { track: track.name }),
     // A form has nothing to offer a search result, and indexing it would
     // compete with the track page that should rank instead.
     robots: { index: false, follow: true },
@@ -41,6 +44,7 @@ export default async function ApplyPage({ params }: Params) {
   const track = getTrack(slug);
   if (!track) notFound();
 
+  const t = await getDictionary();
   const paymentRequired = await applyRequiresPayment();
 
   return (
@@ -53,19 +57,20 @@ export default async function ApplyPage({ params }: Params) {
             className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-ink-dim hover:text-blue-lift"
           >
             <ArrowLeft size={14} aria-hidden="true" />
-            Back to {track.shortName}
+            {fill(t.apply.backTo, { track: track.shortName })}
           </Link>
         </div>
       </header>
 
       <main id="main" className="mx-auto max-w-4xl px-5 py-10 lg:px-8 lg:py-14">
-        <span className="eyebrow text-blue-lift">Apply · {track.examCode}</span>
+        <span className="eyebrow text-blue-lift">
+          {fill(t.apply.applyEyebrow, { examCode: track.examCode })}
+        </span>
         <h1 className="mt-3 text-3xl font-extrabold text-balance text-navy sm:text-4xl">
           {track.name}
         </h1>
         <p className="mt-4 max-w-2xl text-ink-dim">
-          Four short steps. We read every application ourselves and reply
-          within {SITE.responseTime}, whatever we decide.
+          {fill(t.apply.intro, { responseTime: t.common.responseTime })}
         </p>
 
         <ApplyFlow
@@ -74,6 +79,7 @@ export default async function ApplyPage({ params }: Params) {
           priceGbp={PRICE_GBP}
           paymentRequired={paymentRequired}
           turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          t={{ apply: t.apply, errors: t.errors }}
         />
 
         <aside className="mt-12 border-t border-line pt-8">
@@ -81,8 +87,8 @@ export default async function ApplyPage({ params }: Params) {
             <div className="flex items-start gap-2 text-[0.8rem] text-ink-dim">
               <BadgeCheck size={15} className="mt-0.5 shrink-0 text-ok" aria-hidden="true" />
               {paymentRequired
-                ? "Not accepted? Cancelled and refunded in full, automatically."
-                : "Applying is free. You only pay if you accept a place."}
+                ? t.apply.refundReassurance
+                : t.apply.freeReassurance}
             </div>
             {INCLUDED.slice(0, 3).map((item) => (
               <div key={item} className="flex items-start gap-2 text-[0.8rem] text-ink-dim">

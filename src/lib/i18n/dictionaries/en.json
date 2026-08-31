@@ -96,7 +96,11 @@
     "continue": "Continue",
     "submit": "Submit application",
     "submitting": "Submitting…",
-    "savedLocally": "Your answers are saved on this device as you go, so you can come back to them."
+    "savedLocally": "Your answers are saved on this device as you go, so you can come back to them.",
+    "applyEyebrow": "Apply · {examCode}",
+    "refundReassurance": "Not accepted? Cancelled and refunded in full, automatically.",
+    "freeReassurance": "Applying is free. You only pay if you accept a place.",
+    "company": "Company"
   },
   "errors": {
     "nameRequired": "Please give us your full name.",
@@ -155,7 +159,14 @@
     "whatNext": "What happens next",
     "backToSite": "Back to the site",
     "checkEmail": "Check your email",
-    "noEmailTitle": "Nothing arrived by email?"
+    "noEmailTitle": "Nothing arrived by email?",
+    "noLinkTitle": "We could not create your status link.",
+    "noLinkBody": "Your application is safely recorded — this only affects the self-service page. Email {email} with your reference and we will send you one.",
+    "next1": "We read your application in full — a person, not a filter.",
+    "next2": "We reply within {responseTime} with a decision and written feedback, whichever way it goes.",
+    "next3": "If we offer you a place, that email explains exactly how to start.",
+    "emailSentBody": "We have sent a confirmation with your reference and the status link above. If it has not arrived in a few minutes, check your spam folder — and if it is not there either, email {email} with your reference.",
+    "noEmailBody": "We are not sending confirmation emails yet, so this page is your only record — that is why the link above matters. If you lose it, email {email} with your reference."
   },
   "status": {
     "eyebrow": "Your application",
@@ -180,7 +191,8 @@
       "waitlisted": "Waitlisted",
       "declined": "Not offered a place",
       "withdrawn": "Withdrawn"
-    }
+    },
+    "needSomethingBody": "To ask about your application or to withdraw it, email {email} quoting {reference}. This link is private to you — treat it like a password."
   },
   "common": {
     "readMore": "Read more",
@@ -208,6 +220,19 @@
     "contactTitle": "Contact",
     "contactDescription": "Talk to KSF Tech Services about cyber security, IT support, networks, data protection or consulting. {coverage}.",
     "successTitle": "Application received",
-    "statusTitle": "Your application"
+    "statusTitle": "Your application",
+    "applyTitle": "Apply — {track}",
+    "applyDescription": "Apply for the {track} track with KSF Tech Services."
+  },
+  "email": {
+    "greeting": "Hello {firstName},",
+    "haveApplication": "We have your application for {track}.",
+    "yourReference": "Your reference",
+    "quoteReference": "Your reference is {reference}. Quote it if you contact us.",
+    "checkAnyTime": "Check your application at any time:",
+    "linkPrivate": "That link is private to you — treat it like a password. Keep this email: we cannot recover the link, only issue a new one.",
+    "noLink": "We could not create your status link. Email {email} with your reference and we will send you one.",
+    "whatNext": "A person reads your application in full, and we reply within {responseTime} with a decision and written feedback — whichever way it goes.",
+    "receivedSubject": "Application received — {reference}"
   }
 }

@@ -8,6 +8,8 @@ import { getTrack } from "@/content/tracks";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { sendApplicationAlert, sendApplicationReceived } from "@/lib/email";
+import { loadDictionaryFor } from "@/lib/i18n/dictionary";
+import { fill } from "@/lib/locale";
 import { applicationSchema, type ApplyResult } from "./schema";
 
 /** Applications per IP inside the window. Lower than enquiries: nobody
@@ -18,7 +20,6 @@ const RATE_WINDOW_MINUTES = 30;
 /** How long a status link stays valid. */
 const TOKEN_DAYS = 180;
 
-const FALLBACK = `We could not submit that just now. Please email ${SITE.email} and we will take your application by hand.`;
 
 /**
  * Whether payment is part of the flow.
@@ -45,6 +46,26 @@ async function hashedIp(): Promise<{ hash: string | null; ip: string | null }> {
 
 export async function submitApplication(raw: unknown): Promise<ApplyResult> {
   /**
+   * The language to answer in.
+   *
+   * Read before anything else, because every branch below returns a
+   * message. Server Actions cannot call next/root-params, so the form
+   * sends the locale in the payload; a junk value falls back to English
+   * inside loadDictionaryFor rather than throwing on the way to an error
+   * message.
+   */
+  const locale =
+    raw !== null && typeof raw === "object"
+      ? (raw as Record<string, unknown>).locale
+      : undefined;
+  const t = await loadDictionaryFor(
+    typeof locale === "string" ? locale : undefined,
+  );
+
+  /** Shown whenever the application cannot be taken. */
+  const fallback = fill(t.errors.applyFallback, { email: SITE.email });
+
+  /**
    * Honeypot first, before validation.
    *
    * The schema rejects a non-empty `company`, so checking after parsing
@@ -65,13 +86,13 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
     };
   }
 
-  const parsed = applicationSchema.safeParse(raw);
+  const parsed = applicationSchema(t).safeParse(raw);
 
   if (!parsed.success) {
     const fieldErrors = z.flattenError(parsed.error).fieldErrors as Record<string, string[]>;
     return {
       ok: false,
-      message: "Please check the highlighted answers.",
+      message: t.errors.checkAnswers,
       errors: Object.fromEntries(
         Object.entries(fieldErrors).map(([k, v]) => [k, v?.[0] ?? ""]),
       ),
@@ -83,7 +104,7 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
   // The track must exist. A submission naming an unknown slug is either a
   // stale bookmark or someone probing, and neither should reach the table.
   if (!getTrack(app.courseSlug)) {
-    return { ok: false, message: "That track could not be found. Please start again from the track page." };
+    return { ok: false, message: t.errors.trackNotFound };
   }
 
   const { hash: ipHash, ip } = await hashedIp();
@@ -93,7 +114,7 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
     const ourFault = turnstile.reason === "unreachable" || turnstile.reason === "not-configured";
     return {
       ok: false,
-      message: ourFault ? FALLBACK : "That check did not pass. Please try again.",
+      message: ourFault ? fallback : t.errors.checkFailed,
     };
   }
 
@@ -111,7 +132,7 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
       if (!error && (count ?? 0) >= RATE_LIMIT) {
         return {
           ok: false,
-          message: `That is several applications in a short time. Please wait, or email ${SITE.email}.`,
+          message: fill(t.errors.applyRateLimited, { email: SITE.email }),
         };
       }
     }
@@ -145,7 +166,7 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
 
     if (error || !data) {
       console.error("[apply] Insert failed:", error?.message);
-      return { ok: false, message: FALLBACK };
+      return { ok: false, message: fallback };
     }
 
     // The status link. Only the hash is stored, so this raw value is the
@@ -190,6 +211,9 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
       reference: data.reference,
       courseSlug: app.courseSlug,
       statusPath,
+      // The confirmation is written in the language they applied in. The
+      // staff alert ignores this and stays English on purpose.
+      locale: app.locale,
     };
 
     const [confirmation] = await Promise.all([
@@ -211,6 +235,6 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
     };
   } catch (err) {
     console.error("[apply] Storage unavailable:", err);
-    return { ok: false, message: FALLBACK };
+    return { ok: false, message: fallback };
   }
 }

@@ -1,12 +1,12 @@
 import { Link } from "@/components/i18n/Link";
 import { notFound, redirect } from "next/navigation";
-import { getLocale } from "@/app/[lang]/dictionaries";
+import { getDictionary, getLocale } from "@/app/[lang]/dictionaries";
 import { ArrowLeft, Mail, Phone, Globe } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { DecisionPanel } from "@/components/admin/DecisionPanel";
 import { getTrack } from "@/content/tracks";
-import { EXPERIENCE_LEVELS } from "@/lib/applications/schema";
+import { experienceLabel } from "@/lib/applications/schema";
 import { STATUS_LABELS, STATUS_STYLES } from "@/lib/applications/decisions";
 
 export const dynamic = "force-dynamic";
@@ -78,7 +78,14 @@ export default async function ApplicationDetail({
   ]);
 
   const track = getTrack(app.course_slug);
-  const level = EXPERIENCE_LEVELS.find((l) => l.value === app.experience_level);
+
+  // The database stores the level as a bare value, so the readable label
+  // comes from the dictionary — which also means a French staff member
+  // reading /fr/admin sees it in French.
+  const t = await getDictionary();
+  const level = app.experience_level
+    ? experienceLabel(t, app.experience_level)
+    : null;
 
   return (
     <>
@@ -152,7 +159,7 @@ export default async function ApplicationDetail({
             <section className="border border-line bg-surface p-5">
               <h2 className="font-display font-semibold text-navy">Experience</h2>
               <dl className="mt-3 flex flex-col gap-3">
-                <Detail label="Level" value={level?.label ?? app.experience_level ?? "—"} />
+                <Detail label="Level" value={level ?? "—"} />
                 <Detail label="Occupation" value={app.occupation ?? "—"} />
                 <Detail label="Background" value={app.background ?? "—"} />
               </dl>

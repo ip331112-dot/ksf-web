@@ -96,7 +96,11 @@
     "continue": "Continuer",
     "submit": "Envoyer ma candidature",
     "submitting": "Envoi en cours…",
-    "savedLocally": "Vos réponses sont enregistrées sur cet appareil au fur et à mesure : vous pouvez y revenir."
+    "savedLocally": "Vos réponses sont enregistrées sur cet appareil au fur et à mesure : vous pouvez y revenir.",
+    "applyEyebrow": "Candidature · {examCode}",
+    "refundReassurance": "Candidature refusée ? Annulation et remboursement intégral, automatiquement.",
+    "freeReassurance": "Postuler est gratuit. Vous ne payez que si vous acceptez une place.",
+    "company": "Société"
   },
   "errors": {
     "nameRequired": "Merci d'indiquer votre nom complet.",
@@ -155,7 +159,14 @@
     "whatNext": "La suite",
     "backToSite": "Retour au site",
     "checkEmail": "Vérifiez votre e-mail",
-    "noEmailTitle": "Rien reçu par e-mail ?"
+    "noEmailTitle": "Rien reçu par e-mail ?",
+    "noLinkTitle": "Nous n’avons pas pu créer votre lien de suivi.",
+    "noLinkBody": "Votre candidature est bien enregistrée — seul le suivi en libre-service est concerné. Écrivez à {email} en indiquant votre référence et nous vous en enverrons un.",
+    "next1": "Nous lisons votre candidature en entier — une personne, pas un filtre.",
+    "next2": "Nous répondons sous {responseTime}, avec une décision et un retour écrit, quelle qu’elle soit.",
+    "next3": "Si nous vous proposons une place, cet e-mail vous expliquera précisément comment commencer.",
+    "emailSentBody": "Nous vous avons envoyé une confirmation avec votre référence et le lien de suivi ci-dessus. Si elle n’arrive pas d’ici quelques minutes, vérifiez vos spams — et si elle ne s’y trouve pas non plus, écrivez à {email} en indiquant votre référence.",
+    "noEmailBody": "Nous n’envoyons pas encore d’e-mails de confirmation : cette page est donc votre seule trace, et c’est pourquoi le lien ci-dessus est important. Si vous le perdez, écrivez à {email} en indiquant votre référence."
   },
   "status": {
     "eyebrow": "Votre candidature",
@@ -180,7 +191,8 @@
       "waitlisted": "Sur liste d'attente",
       "declined": "Place non proposée",
       "withdrawn": "Retirée"
-    }
+    },
+    "needSomethingBody": "Pour toute question sur votre candidature ou pour la retirer, écrivez à {email} en indiquant {reference}. Ce lien vous est personnel — traitez-le comme un mot de passe."
   },
   "common": {
     "readMore": "En savoir plus",
@@ -208,6 +220,19 @@
     "contactTitle": "Contact",
     "contactDescription": "Contactez KSF Tech Services pour la cybersécurité, le support informatique, les réseaux, la protection des données ou le conseil. {coverage}.",
     "successTitle": "Candidature reçue",
-    "statusTitle": "Votre candidature"
+    "statusTitle": "Votre candidature",
+    "applyTitle": "Candidature — {track}",
+    "applyDescription": "Postulez au parcours {track} avec KSF Tech Services."
+  },
+  "email": {
+    "greeting": "Bonjour {firstName},",
+    "haveApplication": "Nous avons bien reçu votre candidature pour {track}.",
+    "yourReference": "Votre référence",
+    "quoteReference": "Votre référence est {reference}. Indiquez-la si vous nous contactez.",
+    "checkAnyTime": "Suivez votre candidature à tout moment :",
+    "linkPrivate": "Ce lien vous est personnel — traitez-le comme un mot de passe. Conservez cet e-mail : nous ne pouvons pas retrouver le lien, seulement en émettre un nouveau.",
+    "noLink": "Nous n’avons pas pu créer votre lien de suivi. Écrivez à {email} en indiquant votre référence et nous vous en enverrons un.",
+    "whatNext": "Une personne lit votre candidature en entier, et nous répondons sous {responseTime} avec une décision et un retour écrit — quelle qu’elle soit.",
+    "receivedSubject": "Candidature reçue — {reference}"
   }
 }

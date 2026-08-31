@@ -4,11 +4,16 @@ import { CheckCircle2, AlertTriangle, Link2 } from "lucide-react";
 import { KsfLogo } from "@/components/brand/KsfLogo";
 import { SITE } from "@/content/site";
 import { isEmailConfigured } from "@/lib/email";
+import { getDictionary } from "../../dictionaries";
+import { fill } from "@/lib/locale";
 
-export const metadata: Metadata = {
-  title: "Application received",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
+  return {
+    title: t.meta.successTitle,
+    robots: { index: false, follow: false },
+  };
+}
 
 /**
  * Confirmation.
@@ -27,6 +32,7 @@ export default async function ApplySuccessPage({
 }: {
   searchParams: Promise<{ ref?: string; status?: string }>;
 }) {
+  const t = await getDictionary();
   const { ref, status } = await searchParams;
   const reference = typeof ref === "string" ? ref : null;
   const statusPath =
@@ -50,11 +56,10 @@ export default async function ApplySuccessPage({
           <CheckCircle2 size={26} className="mt-1 shrink-0 text-ok" aria-hidden="true" />
           <div>
             <h1 className="font-display text-3xl font-extrabold text-navy sm:text-4xl">
-              Application received
+              {t.success.title}
             </h1>
             <p className="mt-3 text-ink-dim">
-              Thank you. We read every application ourselves and will reply
-              within {SITE.responseTime}.
+              {fill(t.success.intro, { responseTime: t.common.responseTime })}
             </p>
           </div>
         </div>
@@ -62,13 +67,13 @@ export default async function ApplySuccessPage({
         {reference && (
           <div className="mt-8 border-2 border-navy bg-surface p-6">
             <p className="font-mono text-[0.65rem] tracking-widest text-ink-faint uppercase">
-              Your reference
+              {t.success.yourReference}
             </p>
             <p className="mt-2 font-mono text-2xl font-bold tracking-wide text-navy sm:text-3xl">
               {reference}
             </p>
             <p className="mt-2 text-[0.85rem] text-ink-dim">
-              Quote this if you contact us about your application.
+              {t.success.quoteIt}
             </p>
           </div>
         )}
@@ -79,15 +84,13 @@ export default async function ApplySuccessPage({
               <Link2 size={18} className="mt-0.5 shrink-0 text-blue-lift" aria-hidden="true" />
               <div className="min-w-0">
                 <h2 className="font-display font-semibold text-navy">
-                  Your private status link
+                  {t.success.statusTitle}
                 </h2>
                 <p className="mt-1.5 text-[0.875rem] leading-relaxed text-ink-dim">
                   <strong className="font-semibold text-navy">
-                    Save this now — it is shown once and nowhere else.
+                    {t.success.saveNow}
                   </strong>{" "}
-                  It is the only way to check your application without
-                  contacting us, and we cannot recover it for you, only issue a
-                  new one.
+                  {t.success.statusBody}
                 </p>
                 <Link
                   href={statusPath}
@@ -103,24 +106,22 @@ export default async function ApplySuccessPage({
             <AlertTriangle size={18} className="mt-0.5 shrink-0 text-warn" aria-hidden="true" />
             <p className="text-[0.875rem] leading-relaxed text-ink-dim">
               <strong className="font-semibold text-navy">
-                We could not create your status link.
+                {t.success.noLinkTitle}
               </strong>{" "}
-              Your application is safely recorded — this only affects the
-              self-service page. Email {SITE.email} with your reference and we
-              will send you one.
+              {fill(t.success.noLinkBody, { email: SITE.email })}
             </p>
           </div>
         )}
 
         <section className="mt-10">
           <h2 className="font-display text-lg font-semibold text-navy">
-            What happens next
+            {t.success.whatNext}
           </h2>
           <ol className="mt-4 flex flex-col gap-3">
             {[
-              "We read your application in full — a person, not a filter.",
-              `We reply within ${SITE.responseTime} with a decision and written feedback, whichever way it goes.`,
-              "If we offer you a place, that email explains exactly how to start.",
+              t.success.next1,
+              fill(t.success.next2, { responseTime: t.common.responseTime }),
+              t.success.next3,
             ].map((line, i) => (
               <li key={line} className="flex items-start gap-3 text-[0.9rem] text-ink-dim">
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center border border-line font-mono text-[0.7rem] text-ink-faint">
@@ -134,36 +135,12 @@ export default async function ApplySuccessPage({
 
         <section className="mt-10 border-t border-line pt-6">
           <h2 className="font-display font-semibold text-navy">
-            {emailOn ? "Check your email" : "Nothing arrived by email?"}
+            {emailOn ? t.success.checkEmail : t.success.noEmailTitle}
           </h2>
           <p className="mt-2 max-w-prose text-[0.875rem] leading-relaxed text-ink-dim">
-            {emailOn ? (
-              <>
-                We have sent a confirmation with your reference and the status
-                link above. If it has not arrived in a few minutes, check your
-                spam folder — and if it is not there either, email{" "}
-                <a
-                  href={`mailto:${SITE.email}`}
-                  className="font-semibold text-blue-lift hover:underline"
-                >
-                  {SITE.email}
-                </a>{" "}
-                with your reference.
-              </>
-            ) : (
-              <>
-                We are not sending confirmation emails yet, so this page is your
-                only record — that is why the link above matters. If you lose
-                it, email{" "}
-                <a
-                  href={`mailto:${SITE.email}`}
-                  className="font-semibold text-blue-lift hover:underline"
-                >
-                  {SITE.email}
-                </a>{" "}
-                with your reference.
-              </>
-            )}
+            {fill(emailOn ? t.success.emailSentBody : t.success.noEmailBody, {
+              email: SITE.email,
+            })}
           </p>
         </section>
 
@@ -171,7 +148,7 @@ export default async function ApplySuccessPage({
           href="/"
           className="mt-10 inline-flex items-center gap-2 border border-line px-5 py-3 font-semibold text-ink-dim transition-colors hover:border-blue hover:text-blue-lift"
         >
-          Back to the site
+          {t.success.backToSite}
         </Link>
       </main>
     </>

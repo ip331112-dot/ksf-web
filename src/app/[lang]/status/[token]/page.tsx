@@ -7,15 +7,21 @@ import { KsfLogo } from "@/components/brand/KsfLogo";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SITE } from "@/content/site";
 import { getTrack } from "@/content/tracks";
+import { getDictionary, getLocale } from "../../dictionaries";
+import { LOCALE_TAGS, fill } from "@/lib/locale";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Your application",
-  // Never index a page reached by secret token. Indexing one would put a
-  // working status link into a search result.
-  robots: { index: false, follow: false, nocache: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
+  return {
+    title: t.meta.statusTitle,
+    // Never index a page reached by secret token. Indexing one would put
+    // a working status link into a search result.
+    robots: { index: false, follow: false, nocache: true },
+  };
+}
 
 type Application = {
   id: string;
@@ -29,8 +35,11 @@ type Application = {
 
 type Feedback = { body: string; decided_at: string; sent_at: string | null };
 
-/** The four stages an applicant sees, whatever the internal status is. */
-const STAGES = ["Received", "Payment", "In review", "Decision"] as const;
+/**
+ * The four stages an applicant sees, whatever the internal status is.
+ * Keys rather than words — the labels live in `status.stages`.
+ */
+const STAGES = ["received", "payment", "inReview", "decision"] as const;
 
 function stageIndex(status: string): number {
   switch (status) {
@@ -53,12 +62,31 @@ function stageIndex(status: string): number {
 
 const DECIDED = new Set(["accepted", "waitlisted", "declined"]);
 
-const OUTCOME: Record<string, { label: string; tone: string }> = {
-  accepted: { label: "Offered a place", tone: "border-ok bg-ok-soft text-ok" },
-  waitlisted: { label: "Waitlisted", tone: "border-warn bg-warn/10 text-warn" },
-  declined: { label: "Not offered a place", tone: "border-red bg-red-soft text-red" },
-  withdrawn: { label: "Withdrawn", tone: "border-line bg-surface-2 text-ink-faint" },
+/**
+ * Only the colour lives here. The wording comes from the dictionary, so
+ * a decision reads in the language the applicant applied in.
+ */
+const OUTCOME_TONE: Record<string, string> = {
+  accepted: "border-ok bg-ok-soft text-ok",
+  waitlisted: "border-warn bg-warn/10 text-warn",
+  declined: "border-red bg-red-soft text-red",
+  withdrawn: "border-line bg-surface-2 text-ink-faint",
 };
+
+/** A date written the way the reader’s language writes dates. */
+function formatDate(value: string, tag: string): string {
+  return new Date(value).toLocaleDateString(tag, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function outcomeLabel(t: Dictionary, status: string): string | null {
+  return status in t.status.outcomes
+    ? t.status.outcomes[status as keyof typeof t.status.outcomes]
+    : null;
+}
 
 /**
  * Resolve a raw token to an application id, or null.
@@ -89,6 +117,8 @@ export default async function StatusPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
+  const t = await getDictionary();
+  const dateTag = LOCALE_TAGS[await getLocale()];
 
   // Look up by hash. The raw token is never stored, so a leaked database
   // cannot be turned back into a working link.
@@ -122,7 +152,8 @@ export default async function StatusPage({
   const track = getTrack(app.course_slug);
   const reached = stageIndex(app.status);
   const decided = DECIDED.has(app.status) || app.status === "withdrawn";
-  const outcome = OUTCOME[app.status];
+  const outcome = outcomeLabel(t, app.status);
+  const outcomeTone = OUTCOME_TONE[app.status];
 
   return (
     <>
@@ -133,24 +164,20 @@ export default async function StatusPage({
       </header>
 
       <main id="main" className="mx-auto max-w-3xl px-5 py-12 lg:px-8">
-        <span className="eyebrow text-blue-lift">Your application</span>
+        <span className="eyebrow text-blue-lift">{t.status.eyebrow}</span>
         <h1 className="mt-3 font-mono text-2xl font-bold tracking-wide text-navy sm:text-3xl">
           {app.reference}
         </h1>
         <p className="mt-2 text-ink-dim">
-          {track?.name ?? app.course_slug} · submitted{" "}
-          {new Date(app.created_at).toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
+          {track?.name ?? app.course_slug} · {t.common.submitted}{" "}
+          {formatDate(app.created_at, dateTag)}
         </p>
 
         {outcome && (
           <span
-            className={`mt-4 inline-block border px-3 py-1 font-mono text-[0.65rem] tracking-widest uppercase ${outcome.tone}`}
+            className={`mt-4 inline-block border px-3 py-1 font-mono text-[0.65rem] tracking-widest uppercase ${outcomeTone}`}
           >
-            {outcome.label}
+            {outcome}
           </span>
         )}
 
@@ -194,22 +221,22 @@ export default async function StatusPage({
                       (done || active ? "text-navy" : "text-ink-faint")
                     }
                   >
-                    {stage}
+                    {t.status.stages[stage]}
                   </p>
                   <p className="mt-0.5 text-[0.85rem] text-ink-dim">
-                    {i === 0 && "We have your application."}
+                    {i === 0 && t.status.receivedBody}
                     {i === 1 &&
                       (app.paid_at
-                        ? "Payment confirmed."
-                        : "No payment is required at this stage.")}
+                        ? t.status.paymentConfirmed
+                        : t.status.noPaymentNeeded)}
                     {i === 2 &&
                       (reached > 2
-                        ? "Reviewed."
-                        : `A person is reading it. We reply within ${SITE.responseTime}.`)}
+                        ? t.status.reviewed
+                        : fill(t.status.beingRead, {
+                            responseTime: t.common.responseTime,
+                          }))}
                     {i === 3 &&
-                      (decided
-                        ? "A decision has been made — see below."
-                        : "You will hear from us by email.")}
+                      (decided ? t.status.decisionMade : t.status.willHear)}
                   </p>
                 </div>
               </li>
@@ -223,15 +250,11 @@ export default async function StatusPage({
             <div className="flex items-center gap-2">
               <MessageSquare size={17} className="text-blue-lift" aria-hidden="true" />
               <h2 className="font-display font-semibold text-navy">
-                Your feedback from KSF
+                {t.status.feedbackTitle}
               </h2>
             </div>
             <p className="mt-1 font-mono text-[0.65rem] tracking-widest text-ink-faint uppercase">
-              {new Date(feedback.decided_at).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
+              {formatDate(feedback.decided_at, dateTag)}
             </p>
             <p className="mt-4 leading-relaxed whitespace-pre-wrap text-ink">
               {feedback.body}
@@ -240,8 +263,7 @@ export default async function StatusPage({
         ) : (
           <section className="mt-4 border border-dashed border-line bg-surface-2 p-6">
             <p className="text-[0.875rem] text-ink-dim">
-              Written feedback appears here once we have made a decision — you
-              get it either way, not only if you are accepted.
+              {t.status.feedbackPending}
             </p>
           </section>
         )}
@@ -250,14 +272,14 @@ export default async function StatusPage({
           <div className="flex items-start gap-2.5">
             <ShieldQuestion size={17} className="mt-0.5 shrink-0 text-ink-faint" aria-hidden="true" />
             <div>
-              <h2 className="font-display font-semibold text-navy">Need something?</h2>
+              <h2 className="font-display font-semibold text-navy">
+                {t.status.needSomething}
+              </h2>
               <p className="mt-1.5 max-w-prose text-[0.875rem] leading-relaxed text-ink-dim">
-                To ask about your application or to withdraw it, email{" "}
-                <a href={`mailto:${SITE.email}`} className="font-semibold text-blue-lift hover:underline">
-                  {SITE.email}
-                </a>{" "}
-                quoting {app.reference}. This link is private to you — treat it
-                like a password.
+                {fill(t.status.needSomethingBody, {
+                  email: SITE.email,
+                  reference: app.reference,
+                })}
               </p>
             </div>
           </div>
@@ -267,7 +289,7 @@ export default async function StatusPage({
           href="/"
           className="mt-8 inline-flex items-center gap-2 text-[0.875rem] font-semibold text-blue-lift hover:underline"
         >
-          Back to the site
+          {t.success.backToSite}
         </Link>
       </main>
     </>
