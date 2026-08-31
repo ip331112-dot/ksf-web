@@ -25,7 +25,15 @@ export const SITE = {
   tradingName: "[Trading name — to confirm]",
   tradingAddress: "[Disclosure address — to confirm]",
 
-  /** How quickly you promise to respond. Appears on five screens. */
+  /**
+   * How quickly you promise to respond, and where you work.
+   *
+   * These two are also in the dictionaries as `common.responseTime` and
+   * `common.coverage`, and translated pages read them from there — an
+   * English phrase inside a French sentence is worse than no translation
+   * at all. What remains here serves the pages still awaiting
+   * translation. Change one, change both, until the last page moves over.
+   */
   responseTime: "3 working days",
 } as const;
 
@@ -140,15 +148,18 @@ export const HOW_IT_WORKS = [
 ] as const;
 
 export const NAV = [
-  { href: "/tracks", label: "Tracks" },
-  { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/tracks", key: "tracks" },
+  { href: "/services", key: "services" },
+  { href: "/pricing", key: "pricing" },
+  { href: "/about", key: "about" },
+  { href: "/contact", key: "contact" },
   /**
-   * Staff sign-in, at the owner's request. Set apart visually because it
+   * Staff sign-in, at the owner request. Set apart visually because it
    * is for KSF, not for visitors — a customer clicking it should be able
    * to tell it is not for them before they arrive.
+   *
+   * `key` indexes the nav section of the dictionary; the label itself
+   * lives there so it can be translated rather than hard-coded here.
    */
-  { href: "/admin", label: "Staff login", staff: true },
+  { href: "/admin", key: "staff", staff: true },
 ] as const;

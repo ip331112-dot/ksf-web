@@ -11,6 +11,7 @@ import {
   useTransition,
 } from "react";
 import { useRouter } from "next/navigation";
+import { useLocalisedPath } from "@/lib/i18n/useLocale";
 import Script from "next/script";
 import { ArrowLeft, ArrowRight, Loader2, Check } from "lucide-react";
 import { submitApplication } from "@/lib/applications/actions";
@@ -50,6 +51,7 @@ export function ApplyFlow({
   turnstileSiteKey,
 }: Props) {
   const router = useRouter();
+  const localised = useLocalisedPath();
   const uid = useId();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<ApplyErrors>({});
@@ -157,7 +159,7 @@ export function ApplyFlow({
 
       const q = new URLSearchParams({ ref: res.reference });
       if (res.statusPath) q.set("status", res.statusPath);
-      router.push(`/apply/success?${q.toString()}`);
+      router.push(localised(`/apply/success?${q.toString()}`));
     });
   }
 

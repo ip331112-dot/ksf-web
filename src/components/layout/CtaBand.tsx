@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/components/i18n/Link";
 import { ArrowRight } from "lucide-react";
 import { PRICE_GBP } from "@/content/tracks";
 

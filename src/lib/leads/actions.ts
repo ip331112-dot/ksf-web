@@ -7,6 +7,8 @@ import { SITE } from "@/content/site";
 import { sendEnquiryAlert } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { loadDictionaryFor } from "@/lib/i18n/dictionary";
+import { fill } from "@/lib/locale";
 import { enquirySchema, type EnquiryState } from "./schema";
 
 /** Rate limit: this many enquiries from one IP inside the window. */
@@ -14,17 +16,14 @@ const RATE_LIMIT = 3;
 const RATE_WINDOW_MINUTES = 10;
 
 /**
- * Shown whenever we cannot take the message. It names the direct routes,
- * because a visitor who has just typed out their problem deserves
- * somewhere to send it rather than an apology.
+ * Every message this action returns is translated.
+ *
+ * The locale rides along in a hidden form field rather than coming from
+ * `next/root-params`, which Server Actions cannot call at all. A junk
+ * value falls back to English inside loadDictionaryFor rather than
+ * throwing — failing on the way to an error message would leave the
+ * visitor with nothing.
  */
-const FALLBACK = `We could not send that just now. Please email ${SITE.email} or call us — both reach us today.`;
-
-/**
- * The only success wording there is. The honeypot path returns it too, so
- * a bot cannot tell acceptance from silent rejection by diffing the reply.
- */
-const ACCEPTED = `Thank you — we have your message and will reply within ${SITE.responseTime}.`;
 
 /**
  * The visitor's IP, hashed.
@@ -58,6 +57,22 @@ export async function submitEnquiry(
   _prev: EnquiryState,
   formData: FormData,
 ): Promise<EnquiryState> {
+  const t = await loadDictionaryFor(formData.get("locale")?.toString());
+
+  /**
+   * Shown whenever we cannot take the message. It names the direct
+   * routes, because a visitor who has just typed out their problem
+   * deserves somewhere to send it rather than an apology.
+   */
+  const fallback = fill(t.errors.fallback, { email: SITE.email });
+
+  /**
+   * The only success wording there is. The honeypot path returns it too,
+   * so a bot cannot tell acceptance from silent rejection by diffing the
+   * reply.
+   */
+  const accepted = fill(t.contact.accepted, { responseTime: t.common.responseTime });
+
   const raw = {
     name: String(formData.get("name") ?? ""),
     email: String(formData.get("email") ?? ""),
@@ -80,17 +95,17 @@ export async function submitEnquiry(
   // 1. Honeypot. A bot filled the hidden field: accept, discard, say
   //    nothing. Reporting the rejection would only teach it to adapt.
   if (raw.company.length > 0) {
-    return { ok: true, message: ACCEPTED };
+    return { ok: true, message: accepted };
   }
 
   // 2. Same schema the browser ran, because the browser is not a
   //    trustworthy narrator of what it sent.
-  const parsed = enquirySchema.safeParse(raw);
+  const parsed = enquirySchema(t).safeParse(raw);
   if (!parsed.success) {
     const fieldErrors = z.flattenError(parsed.error).fieldErrors;
     return {
       ok: false,
-      message: "Please check the highlighted fields.",
+      message: t.errors.checkFields,
       values: typed,
       errors: Object.fromEntries(
         Object.entries(fieldErrors).map(([k, v]) => [k, v?.[0] ?? ""]),
@@ -115,8 +130,8 @@ export async function submitEnquiry(
 
     return {
       ok: false,
-      message: ourFault ? FALLBACK : "That check did not pass. Please try again.",
-      errors: ourFault ? undefined : { turnstile: "Verification failed." },
+      message: ourFault ? fallback : t.errors.checkFailed,
+      errors: ourFault ? undefined : { turnstile: t.errors.verificationFailed },
       values: typed,
     };
   }
@@ -143,7 +158,10 @@ export async function submitEnquiry(
       if (!error && (count ?? 0) >= RATE_LIMIT) {
         return {
           ok: false,
-          message: `That is a few messages in a short time. Please wait ${RATE_WINDOW_MINUTES} minutes, or email ${SITE.email}.`,
+          message: fill(t.errors.rateLimited, {
+            minutes: RATE_WINDOW_MINUTES,
+            email: SITE.email,
+          }),
           values: typed,
         };
       }
@@ -176,10 +194,10 @@ export async function submitEnquiry(
   if (!stored && !alerted) {
     // Nothing captured it. Saying "thank you" here would be a lie that
     // costs KSF a customer.
-    return { ok: false, message: FALLBACK, values: typed };
+    return { ok: false, message: fallback, values: typed };
   }
 
   // 7. One generic success. It reveals nothing about what happened
   //    downstream, so the form cannot be used to probe the database.
-  return { ok: true, message: ACCEPTED };
+  return { ok: true, message: accepted };
 }

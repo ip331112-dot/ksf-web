@@ -6,6 +6,32 @@ import { AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
 import { submitEnquiry } from "@/lib/leads/actions";
 import { EMPTY_STATE } from "@/lib/leads/schema";
 import { SERVICES, SITE } from "@/content/site";
+import { useLocale } from "@/lib/i18n/useLocale";
+import { fill } from "@/lib/locale";
+import type { Dictionary } from "@/lib/i18n/dictionary";
+
+export type EnquiryStrings = Pick<
+  Dictionary["contact"],
+  | "notLiveTitle"
+  | "notLiveBody"
+  | "sentTitle"
+  | "name"
+  | "yourName"
+  | "whatAbout"
+  | "select"
+  | "training"
+  | "other"
+  | "whatDoYouNeed"
+  | "sending"
+  | "sendButton"
+  | "replyPromise"
+> & {
+  email: string;
+  phone: string;
+  optional: string;
+  message: string;
+  responseTime: string;
+};
 
 type Props = {
   /** `full` is the contact page; `compact` is the service-page sidebar. */
@@ -22,6 +48,16 @@ type Props = {
    * a real enquiry.
    */
   pipelineReady: boolean;
+  /**
+   * Every string this form renders, handed down from the page.
+   *
+   * A Client Component cannot read root-params, so the translations have
+   * to arrive as props — and props to a client component are serialised
+   * into the page for hydration. Passing whole dictionary sections would
+   * put every unrelated string in the HTML of every page carrying a
+   * form, so this is the exact set the form renders and nothing more.
+   */
+  t: EnquiryStrings;
 };
 
 const field =
@@ -42,9 +78,11 @@ export function EnquiryForm({
   defaultService = "",
   turnstileSiteKey,
   pipelineReady,
+  t,
 }: Props) {
   const [state, formAction, pending] = useActionState(submitEnquiry, EMPTY_STATE);
   const uid = useId();
+  const locale = useLocale();
   const compact = variant === "compact";
 
   if (!pipelineReady) {
@@ -57,17 +95,9 @@ export function EnquiryForm({
         />
         <p className="text-[0.875rem] leading-relaxed text-ink-dim">
           <strong className="font-semibold text-navy">
-            This form is not live yet.
+            {t.notLiveTitle}
           </strong>{" "}
-          We are still connecting it, and we would rather tell you than take your
-          message and lose it. Please email{" "}
-          <a
-            href={`mailto:${SITE.email}`}
-            className="font-semibold text-blue-lift hover:underline"
-          >
-            {SITE.email}
-          </a>{" "}
-          or call us — both reach us today.
+          {fill(t.notLiveBody, { email: SITE.email })}
         </p>
       </div>
     );
@@ -82,7 +112,7 @@ export function EnquiryForm({
           aria-hidden="true"
         />
         <div>
-          <p className="font-semibold text-navy">Message sent</p>
+          <p className="font-semibold text-navy">{t.sentTitle}</p>
           <p className="mt-1 text-[0.875rem] leading-relaxed text-ink-dim">
             {state.message}
           </p>
@@ -106,6 +136,12 @@ export function EnquiryForm({
         className={compact ? "mt-5 flex flex-col gap-3" : "mt-6 flex flex-col gap-4"}
       >
         <input type="hidden" name="sourcePath" value={sourcePath} />
+        {/*
+          Server Actions cannot read root-params, so the language the
+          visitor is reading travels with the submission. Without it every
+          validation message would come back in English.
+        */}
+        <input type="hidden" name="locale" value={locale} />
 
         {/*
           Honeypot. Hidden from people and from screen readers, but a bot
@@ -141,7 +177,7 @@ export function EnquiryForm({
                   : "text-[0.8rem] font-semibold text-navy"
               }
             >
-              {compact ? "Name" : "Your name"}
+              {compact ? t.name : t.yourName}
             </label>
             <input
               id={`${uid}-name`}
@@ -167,7 +203,7 @@ export function EnquiryForm({
                   : "text-[0.8rem] font-semibold text-navy"
               }
             >
-              Email
+              {t.email}
             </label>
             <input
               id={`${uid}-email`}
@@ -190,7 +226,10 @@ export function EnquiryForm({
                   htmlFor={`${uid}-phone`}
                   className="text-[0.8rem] font-semibold text-navy"
                 >
-                  Phone <span className="font-normal text-ink-faint">(optional)</span>
+                  {t.phone}{" "}
+                  <span className="font-normal text-ink-faint">
+                    ({t.optional})
+                  </span>
                 </label>
                 <input
                   id={`${uid}-phone`}
@@ -213,7 +252,7 @@ export function EnquiryForm({
                   htmlFor={`${uid}-service`}
                   className="text-[0.8rem] font-semibold text-navy"
                 >
-                  What is this about?
+                  {t.whatAbout}
                 </label>
                 <select
                   id={`${uid}-service`}
@@ -221,14 +260,14 @@ export function EnquiryForm({
                   defaultValue={state.values?.service || defaultService}
                   className={field}
                 >
-                  <option value="">Select…</option>
+                  <option value="">{t.select}</option>
                   {SERVICES.map((s) => (
                     <option key={s.slug} value={s.slug}>
                       {s.name}
                     </option>
                   ))}
-                  <option value="training">Certification training</option>
-                  <option value="other">Something else</option>
+                  <option value="training">{t.training}</option>
+                  <option value="other">{t.other}</option>
                 </select>
               </div>
             </>
@@ -246,7 +285,7 @@ export function EnquiryForm({
                 : "text-[0.8rem] font-semibold text-navy"
             }
           >
-            {compact ? "What do you need?" : "Message"}
+            {compact ? t.whatDoYouNeed : t.message}
           </label>
           <textarea
             id={`${uid}-message`}
@@ -283,11 +322,11 @@ export function EnquiryForm({
             }
           >
             {pending && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
-            {pending ? "Sending…" : "Send enquiry"}
+            {pending ? t.sending : t.sendButton}
           </button>
           {!compact && (
             <p className="mt-2.5 text-[0.8rem] text-ink-faint">
-              We reply to every enquiry, within {SITE.responseTime}.
+              {fill(t.replyPromise, { responseTime: t.responseTime })}
             </p>
           )}
         </div>

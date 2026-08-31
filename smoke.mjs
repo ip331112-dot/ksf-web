@@ -1,5 +1,10 @@
-// Smoke test: every route responds 200, renders its expected marker,
-// and contains no obviously broken internal links.
+// Smoke test: every route responds 200 in every language, renders its
+// expected marker, and contains no obviously broken internal links.
+//
+// Both locales are walked separately rather than trusting that /fr works
+// because /en does — the whole point of the locale segment is that the
+// two render different trees, and a missing French dictionary key throws
+// at render time on one and not the other.
 import { readFileSync } from "node:fs";
 
 const BASE = "http://localhost:3000";
@@ -12,13 +17,34 @@ const serviceSlugs = [
   ...readFileSync("src/content/site.ts", "utf8").matchAll(/slug:\s*"([^"]+)"/g),
 ].map((m) => m[1]);
 
-const routes = [
-  "/",
+const LOCALES = ["en", "fr"];
+
+const paths = [
+  "",
   "/tracks",
   ...trackSlugs.map((s) => `/tracks/${s}`),
   "/services",
   ...serviceSlugs.map((s) => `/services/${s}`),
+  "/contact",
+  "/pricing",
+  "/about",
+  "/faq",
 ];
+
+const routes = LOCALES.flatMap((l) => paths.map((p) => `/${l}${p}`));
+
+// The unprefixed root must redirect rather than 404 — it is what every
+// existing link and bookmark points at.
+console.log("=== LOCALE REDIRECT ===");
+for (const p of ["/", "/tracks", "/contact"]) {
+  const res = await fetch(BASE + p, { redirect: "manual" });
+  const to = res.headers.get("location");
+  const ok =
+    res.status >= 300 && res.status < 400 && /^\/(en|fr)/.test(to ?? "");
+  console.log(`${ok ? "PASS" : "FAIL"}  ${res.status} ${p} -> ${to}`);
+  if (!ok) process.exitCode = 1;
+}
+console.log();
 
 let pass = 0;
 let fail = 0;
@@ -36,12 +62,28 @@ for (const r of routes) {
 
   const hasH1 = /<h1[\s>]/.test(html);
   const hasFooter = /<footer[\s>]/.test(html);
-  const ok = status === 200 && hasH1 && hasFooter;
+
+  // The page must declare the language it is actually in. Getting this
+  // wrong is invisible on screen but tells a screen reader to pronounce
+  // French with English phonetics.
+  const expected = r.startsWith("/fr") ? "fr-FR" : "en-GB";
+  const langOk = new RegExp(`<html[^>]+lang="${expected}"`).test(html);
+
+  // An unreplaced {placeholder} in the visible markup means a dictionary
+  // string reached the page without its values filled in. Script blocks
+  // are stripped first: a template like "within {responseTime}" is
+  // supposed to appear verbatim in the hydration payload for a client
+  // component, which fills it at render.
+  const visible = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+  const noHoles =
+    !/\{(price|email|responseTime|minutes|max|track|coverage)\}/.test(visible);
+
+  const ok = status === 200 && hasH1 && hasFooter && langOk && noHoles;
   ok ? pass++ : fail++;
 
   console.log(
     `${ok ? "PASS" : "FAIL"}  ${String(status).padEnd(4)} ${r}` +
-      (ok ? "" : `   [h1:${hasH1} footer:${hasFooter}]`),
+      (ok ? "" : `   [h1:${hasH1} footer:${hasFooter} lang:${langOk} noHoles:${noHoles}]`),
   );
 
   for (const m of html.matchAll(/href="(\/[^"#?]*)"/g)) links.add(m[1]);

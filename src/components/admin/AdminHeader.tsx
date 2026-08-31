@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/components/i18n/Link";
 import { KsfLogo } from "@/components/brand/KsfLogo";
 import { SignOutButton } from "@/components/admin/SignOutButton";
 

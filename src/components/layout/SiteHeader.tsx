@@ -1,13 +1,24 @@
-"use client";
-
-import Link from "next/link";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Link } from "@/components/i18n/Link";
 import { KsfLogo } from "@/components/brand/KsfLogo";
 import { NAV } from "@/content/site";
+import { getDictionary } from "@/app/[lang]/dictionaries";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { MobileNav } from "./MobileNav";
 
-export function SiteHeader() {
-  const [open, setOpen] = useState(false);
+/**
+ * A Server Component, so the nav labels come straight from the
+ * dictionary with no translation payload shipped to the browser. The two
+ * genuinely interactive pieces — the mobile toggle and the language
+ * switcher — are client islands nested inside it.
+ */
+export async function SiteHeader() {
+  const t = await getDictionary();
+
+  const items = NAV.map((item) => ({
+    href: item.href,
+    label: t.nav[item.key],
+    staff: "staff" in item && item.staff,
+  }));
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/85">
@@ -16,77 +27,41 @@ export function SiteHeader() {
 
         {/* Desktop nav */}
         <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
-          {NAV.map((item) => {
-            const staff = "staff" in item && item.staff;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={
-                  staff
-                    ? // Quieter, and set off by a rule: it is a door for
-                      // KSF, not a page a customer wants.
-                      "border-l border-line pl-7 text-[0.85rem] font-medium text-ink-faint transition-colors hover:text-blue-lift"
-                    : "text-[0.925rem] font-medium text-ink-dim transition-colors hover:text-blue-lift"
-                }
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+          {items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={
+                item.staff
+                  ? // Quieter, and set off by a rule: it is a door for
+                    // KSF, not a page a customer wants.
+                    "border-l border-line pl-7 text-[0.85rem] font-medium text-ink-faint transition-colors hover:text-blue-lift"
+                  : "text-[0.925rem] font-medium text-ink-dim transition-colors hover:text-blue-lift"
+              }
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageSwitcher label={t.nav.language} />
+
           {/* The CTA never collapses — it stays a button on mobile */}
           <Link
             href="/tracks"
             className="inline-flex items-center bg-blue px-4 py-2.5 text-[0.875rem] font-semibold text-white transition-colors hover:bg-navy-3 sm:px-5"
           >
-            Apply now
+            {t.nav.applyNow}
           </Link>
 
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="inline-flex h-10 w-10 items-center justify-center border border-line text-navy lg:hidden"
-          >
-            {open ? <X size={18} /> : <Menu size={18} />}
-          </button>
+          <MobileNav
+            items={items}
+            openLabel={t.nav.openMenu}
+            closeLabel={t.nav.closeMenu}
+          />
         </div>
       </div>
-
-      {/* Mobile nav */}
-      {open && (
-        <nav
-          id="mobile-nav"
-          aria-label="Main"
-          className="border-t border-line bg-surface lg:hidden"
-        >
-          <ul className="mx-auto max-w-6xl px-5 py-2">
-            {NAV.map((item) => {
-              const staff = "staff" in item && item.staff;
-              return (
-                <li key={item.href} className="border-b border-line-soft last:border-0">
-                  <Link
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    className={
-                      staff
-                        ? "block py-3.5 text-[0.9rem] font-medium text-ink-faint"
-                        : "block py-3.5 font-medium text-ink"
-                    }
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      )}
     </header>
   );
 }

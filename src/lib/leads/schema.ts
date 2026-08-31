@@ -1,4 +1,6 @@
 import { z } from "zod";
+import type { Dictionary } from "@/lib/i18n/dictionary";
+import { fill } from "@/lib/locale";
 
 /**
  * One schema, validated twice: in the browser for a fast, kind error
@@ -9,49 +11,51 @@ import { z } from "zod";
  * change one, change the migration too — a mismatch turns a friendly
  * field error into a 500.
  */
-export const enquirySchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Please give us your name.")
-    .max(120, "That name is too long for our records."),
+export function enquirySchema(t: Dictionary) {
+  return z.object({
+    name: z
+      .string()
+      .trim()
+      .min(2, t.errors.nameShort)
+      .max(120, t.errors.nameLong),
 
-  email: z
-    .email("That does not look like an email address.")
-    .max(200, "That email address is too long."),
+    email: z
+      .email(t.errors.emailInvalid)
+      .max(200, t.errors.emailLong),
 
-  phone: z
-    .string()
-    .trim()
-    .max(40, "That phone number is too long.")
-    .optional()
-    .or(z.literal("")),
+    phone: z
+      .string()
+      .trim()
+      .max(40, t.errors.phoneLong)
+      .optional()
+      .or(z.literal("")),
 
-  service: z
-    .string()
-    .trim()
-    .max(60)
-    .optional()
-    .or(z.literal("")),
+    service: z
+      .string()
+      .trim()
+      .max(60)
+      .optional()
+      .or(z.literal("")),
 
-  message: z
-    .string()
-    .trim()
-    .min(10, "Please tell us a little more — ten characters at least.")
-    .max(4000, "Please keep this under 4000 characters."),
+    message: z
+      .string()
+      .trim()
+      .min(10, t.errors.messageShort)
+      .max(4000, fill(t.errors.textLong, { max: 4000 })),
 
-  /** Which page the enquiry came from. Set by the form, not the visitor. */
-  sourcePath: z.string().trim().max(200).optional().or(z.literal("")),
+    /** Which page the enquiry came from. Set by the form, not the visitor. */
+    sourcePath: z.string().trim().max(200).optional().or(z.literal("")),
 
-  /**
-   * Honeypot. Hidden from people, irresistible to naive bots. A non-empty
-   * value means we drop the submission and still return success, so the
-   * bot learns nothing.
-   */
-  company: z.string().max(0).optional().or(z.literal("")),
-});
+    /**
+     * Honeypot. Hidden from people, irresistible to naive bots. A
+     * non-empty value means we drop the submission and still return
+     * success, so the bot learns nothing.
+     */
+    company: z.string().max(0).optional().or(z.literal("")),
+  });
+}
 
-export type EnquiryInput = z.infer<typeof enquirySchema>;
+export type EnquiryInput = z.infer<ReturnType<typeof enquirySchema>>;
 
 /**
  * The statuses a lead can hold, matching the CHECK constraint on
