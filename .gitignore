@@ -42,3 +42,11 @@ next-env.d.ts
 
 # .env.example is documentation, not a secret — keep it tracked
 !.env.example
+
+.vercel
+
+# Deployment scratch — logs and the cloudflared binary from the preview
+# tunnel work. The tunnel is obsolete now the site deploys to Vercel.
+.tools/
+*.log
+deploy-preview.ps1

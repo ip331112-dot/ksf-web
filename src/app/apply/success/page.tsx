@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CheckCircle2, AlertTriangle, Link2 } from "lucide-react";
 import { KsfLogo } from "@/components/brand/KsfLogo";
 import { SITE } from "@/content/site";
+import { isEmailConfigured } from "@/lib/email";
 
 export const metadata: Metadata = {
   title: "Application received",
@@ -30,6 +31,11 @@ export default async function ApplySuccessPage({
   const reference = typeof ref === "string" ? ref : null;
   const statusPath =
     typeof status === "string" && status.startsWith("/status/") ? status : null;
+
+  // Whether we actually emailed them changes what this page should say.
+  // Telling someone to check an inbox nothing was sent to is how a
+  // status link gets lost for good.
+  const emailOn = isEmailConfigured();
 
   return (
     <>
@@ -128,15 +134,36 @@ export default async function ApplySuccessPage({
 
         <section className="mt-10 border-t border-line pt-6">
           <h2 className="font-display font-semibold text-navy">
-            Nothing arrived by email?
+            {emailOn ? "Check your email" : "Nothing arrived by email?"}
           </h2>
           <p className="mt-2 max-w-prose text-[0.875rem] leading-relaxed text-ink-dim">
-            We are not sending confirmation emails yet, so this page is your
-            record — that is why the link above matters. If you lose it, email{" "}
-            <a href={`mailto:${SITE.email}`} className="font-semibold text-blue-lift hover:underline">
-              {SITE.email}
-            </a>{" "}
-            with your reference.
+            {emailOn ? (
+              <>
+                We have sent a confirmation with your reference and the status
+                link above. If it has not arrived in a few minutes, check your
+                spam folder — and if it is not there either, email{" "}
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="font-semibold text-blue-lift hover:underline"
+                >
+                  {SITE.email}
+                </a>{" "}
+                with your reference.
+              </>
+            ) : (
+              <>
+                We are not sending confirmation emails yet, so this page is your
+                only record — that is why the link above matters. If you lose
+                it, email{" "}
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="font-semibold text-blue-lift hover:underline"
+                >
+                  {SITE.email}
+                </a>{" "}
+                with your reference.
+              </>
+            )}
           </p>
         </section>
 

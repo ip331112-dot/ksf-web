@@ -7,6 +7,7 @@ import { SITE } from "@/content/site";
 import { getTrack } from "@/content/tracks";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { sendApplicationAlert, sendApplicationReceived } from "@/lib/email";
 import { applicationSchema, type ApplyResult } from "./schema";
 
 /** Applications per IP inside the window. Lower than enquiries: nobody
@@ -172,10 +173,41 @@ export async function submitApplication(raw: unknown): Promise<ApplyResult> {
       detail: `Applied for ${app.courseSlug}`,
     });
 
+    const statusPath = tokenError ? "" : `/status/${token}`;
+
+    /**
+     * Email last, and never blocking.
+     *
+     * The application is already stored, so a mail failure must not turn
+     * a successful submission into an error. But the confirmation is the
+     * only durable copy of the status link the applicant will have — the
+     * token is stored as a hash — so it is worth sending before we
+     * return, not after, and worth logging loudly when it fails.
+     */
+    const mail = {
+      name: app.name,
+      email: app.email,
+      reference: data.reference,
+      courseSlug: app.courseSlug,
+      statusPath,
+    };
+
+    const [confirmation] = await Promise.all([
+      sendApplicationReceived(mail),
+      sendApplicationAlert({ ...mail, motivation: app.motivation }),
+    ]);
+
+    if (!confirmation.sent) {
+      console.error(
+        `[apply] ${data.reference}: confirmation email NOT delivered (${confirmation.reason}). The status link now exists only on the success page.`,
+      );
+    }
+
     return {
       ok: true,
       reference: data.reference,
-      statusPath: tokenError ? "" : `/status/${token}`,
+      statusPath,
+      emailed: confirmation.sent,
     };
   } catch (err) {
     console.error("[apply] Storage unavailable:", err);

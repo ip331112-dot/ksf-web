@@ -1,10 +1,35 @@
 "use server";
 
+import { createHash, randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendDecision } from "@/lib/email";
 import { DECISIONS, type Decision } from "./decisions";
+
+/**
+ * Issue a fresh status link for an application and return its path.
+ *
+ * Returns "" if it cannot be created — the decision email then simply
+ * omits the link rather than shipping a broken one.
+ */
+async function mintStatusPath(applicationId: string): Promise<string> {
+  const token = randomBytes(32).toString("hex");
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+
+  const { error } = await createAdminClient().from("access_tokens").insert({
+    token_hash: tokenHash,
+    application_id: applicationId,
+    expires_at: new Date(Date.now() + 180 * 86_400_000).toISOString(),
+  });
+
+  if (error) {
+    console.error("[admin] Could not issue a status link:", error.message);
+    return "";
+  }
+  return `/status/${token}`;
+}
 
 /**
  * Append to the audit trail.
@@ -48,7 +73,13 @@ const input = z.object({
     .max(8000, "That is longer than the 8000 characters we can store."),
 });
 
-type Result = { ok: boolean; error?: string };
+type Result = {
+  ok: boolean;
+  error?: string;
+  /** Whether the applicant was actually emailed. The panel reports this
+   *  rather than assuming, so staff know when to follow up by hand. */
+  emailed?: boolean;
+};
 
 /**
  * Authorise independently of the page.
@@ -136,9 +167,17 @@ export async function recordDecision(
 
   const { data: app } = await supabase
     .from("applications")
-    .select("id, status, paid_at")
+    .select("id, status, paid_at, name, email, reference, course_slug")
     .eq("id", parsed.data.applicationId)
-    .maybeSingle<{ id: string; status: string; paid_at: string | null }>();
+    .maybeSingle<{
+      id: string;
+      status: string;
+      paid_at: string | null;
+      name: string;
+      email: string;
+      reference: string;
+      course_slug: string;
+    }>();
 
   if (!app) return { ok: false, error: "That application could not be found." };
 
@@ -187,7 +226,37 @@ export async function recordDecision(
     "Decision recorded with written feedback",
   );
 
+  /**
+   * Tell the applicant.
+   *
+   * A fresh status token is minted for this email rather than reusing
+   * the original: tokens are stored only as SHA-256 hashes, so the one
+   * issued at submission cannot be recovered by anyone, including us.
+   * Issuing a new one is exactly what the site already promises.
+   *
+   * The decision is already recorded by this point, so a mail failure
+   * is reported to staff rather than rolled back — the applicant can
+   * still be told by hand, but only if we say the email did not go.
+   */
+  const statusPath = await mintStatusPath(parsed.data.applicationId);
+
+  const mail = await sendDecision({
+    name: app.name,
+    email: app.email,
+    reference: app.reference,
+    courseSlug: app.course_slug,
+    statusPath,
+    decision: parsed.data.decision,
+    feedback: parsed.data.feedback,
+  });
+
+  if (!mail.sent) {
+    console.error(
+      `[admin] ${app.reference}: decision recorded but email NOT delivered (${mail.reason}).`,
+    );
+  }
+
   revalidatePath(`/admin/applications/${parsed.data.applicationId}`);
   revalidatePath("/admin/applications");
-  return { ok: true };
+  return { ok: true, emailed: mail.sent };
 }

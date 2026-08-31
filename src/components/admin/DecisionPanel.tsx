@@ -30,6 +30,7 @@ export function DecisionPanel({
   const [feedback, setFeedback] = useState(existingFeedback ?? "");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<string | null>(null);
+  const [emailed, setEmailed] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const decided = ["accepted", "waitlisted", "declined", "withdrawn"].includes(status);
@@ -51,6 +52,7 @@ export function DecisionPanel({
         setError(res.error ?? "Could not record that decision.");
         return;
       }
+      setEmailed(Boolean(res.emailed));
       setDone(DECISION_LABELS[choice]);
     });
   }
@@ -67,9 +69,17 @@ export function DecisionPanel({
           feedback is saved against the application. It is visible on their
           status page now.
         </p>
-        <p className="mt-3 border-t border-ok/30 pt-3 text-[0.8rem] text-ink-dim">
-          Nothing has been emailed — Resend is not configured yet, so tell them
-          yourself for now.
+        <p
+          className={
+            "mt-3 border-t pt-3 text-[0.8rem] " +
+            (emailed
+              ? "border-ok/30 text-ink-dim"
+              : "border-red/40 font-medium text-red")
+          }
+        >
+          {emailed
+            ? `We have emailed ${applicantName} the decision and your feedback.`
+            : "The email did NOT go out — nothing was sent to them. Tell them yourself, and check the server log for the reason."}
         </p>
       </div>
     );
@@ -152,8 +162,8 @@ export function DecisionPanel({
       </button>
 
       <p className="mt-2 text-[0.72rem] text-ink-faint">
-        Recorded against the application and shown on their status page. No
-        email is sent yet.
+        Recorded against the application, shown on their status page, and
+        emailed to them with your feedback.
       </p>
     </div>
   );

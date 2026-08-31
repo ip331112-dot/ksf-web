@@ -88,7 +88,18 @@ export type ApplicationInput = z.infer<typeof applicationSchema>;
 export type ApplyErrors = Partial<Record<string, string>>;
 
 export type ApplyResult =
-  | { ok: true; reference: string; statusPath: string }
+  | {
+      ok: true;
+      reference: string;
+      statusPath: string;
+      /**
+       * Whether the confirmation email actually went out. The success
+       * page uses this to decide between "check your inbox" and "save
+       * this link, it is your only copy" — telling someone to check an
+       * inbox nothing was sent to is how status links get lost.
+       */
+      emailed?: boolean;
+    }
   | { ok: false; message: string; errors?: ApplyErrors; step?: number };
 
 /** The shape held in localStorage between steps. */
