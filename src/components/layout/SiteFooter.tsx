@@ -5,6 +5,7 @@ import { SITE, SERVICES } from "@/content/site";
 import { tracksInOrder } from "@/content/tracks";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { SocialLinks } from "@/components/social/SocialLinks";
 
 /**
  * Labels are dictionary keys rather than words, resolved in the
@@ -84,7 +85,10 @@ export async function SiteFooter() {
         <div className="mt-14 flex flex-col gap-5 border-t border-white/15 pt-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <KsfLogo tone="dark" showTagline href={null} />
-            <LanguageSwitcher label={t.nav.language} tone="dark" />
+            <div className="flex items-center gap-4">
+              <SocialLinks label={t.footer.followUs} tone="dark" />
+              <LanguageSwitcher label={t.nav.language} tone="dark" />
+            </div>
           </div>
 
           <ul className="flex flex-wrap gap-x-7 gap-y-2.5 text-[0.85rem] text-white/70">

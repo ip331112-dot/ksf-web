@@ -3,6 +3,7 @@ import { Archivo, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { SITE } from "@/content/site";
 import { LOCALES, LOCALE_TAGS, fill } from "@/lib/locale";
 import { getDictionary, getLocale } from "./dictionaries";
+import { organizationSchema } from "@/lib/seo/organization";
 import { PRICE_GBP } from "@/content/tracks";
 import "../globals.css";
 
@@ -64,6 +65,18 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: LOCALE_TAGS[locale].replace("-", "_"),
       type: "website",
     },
+    /*
+     * Without this the card falls back to a small square thumbnail. The
+     * opengraph-image is 1200x630, so it is worth asking for the large
+     * format that shape was made for. No `site` handle: KSF has no
+     * Twitter/X account, and naming one that does not exist is worse
+     * than omitting the field.
+     */
+    twitter: {
+      card: "summary_large_image",
+      title: SITE.name,
+      description,
+    },
     robots: { index: true, follow: true },
   };
 }
@@ -79,6 +92,17 @@ export default async function RootLayout({
       <body
         className={`${archivo.variable} ${plexSans.variable} ${plexMono.variable} antialiased`}
       >
+        {/*
+          Organization schema, site-wide. It is what ties ksftechservices.com
+          to the Facebook, YouTube and TikTok accounts as far as a search
+          engine is concerned — the footer icons only do that for humans.
+        */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema(locale)),
+          }}
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-blue focus:px-4 focus:py-2 focus:text-white"
