@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { LegalShell } from "@/components/legal/LegalShell";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "Privacy policy",
   description: "How KSF Tech Services collects, uses and protects your personal data under UK GDPR.",
-};
+    alternates: await alternatesFor("/privacy"),
+  };
+}
 
 export default function PrivacyPage() {
   return (

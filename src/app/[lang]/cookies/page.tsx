@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { LegalShell } from "@/components/legal/LegalShell";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "Cookie policy",
   description: "What this site stores in your browser, and why.",
-};
+    alternates: await alternatesFor("/cookies"),
+  };
+}
 
 export default function CookiesPage() {
   return (

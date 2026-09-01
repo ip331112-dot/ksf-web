@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { Link } from "@/components/i18n/Link";
 import { ArrowRight, HelpCircle } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -13,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: t.meta.tracksTitle,
     description: fill(t.meta.tracksDescription, { price: PRICE_GBP }),
+    alternates: await alternatesFor("/tracks"),
   };
 }
 

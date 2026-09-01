@@ -234,5 +234,17 @@
     "noLink": "We could not create your status link. Email {email} with your reference and we will send you one.",
     "whatNext": "A person reads your application in full, and we reply within {responseTime} with a decision and written feedback — whichever way it goes.",
     "receivedSubject": "Application received — {reference}"
+  },
+  "cta": {
+    "title": "Ready to start? Apply to a track today.",
+    "body": "£{price} a month, mentored preparation, and a real answer from a real person. Not accepted? You are refunded in full, automatically."
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "inPreparation": "In preparation",
+    "inPreparationBody": "This document is being finalised and will be published before KSF accepts any payment. Until then, nothing on this page forms a contract. If you need this information now, email {email} and we will send it to you directly.",
+    "willCover": "What this document will cover",
+    "tradingAs": "Trading as {tradingName}. Registered address {tradingAddress}.",
+    "contactUs": "Contact us"
   }
 }

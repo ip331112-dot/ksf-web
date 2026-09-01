@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { LegalShell } from "@/components/legal/LegalShell";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "Terms of service",
   description: "The terms under which KSF Tech Services provides certification training and services.",
-};
+    alternates: await alternatesFor("/terms"),
+  };
+}
 
 export default function TermsPage() {
   return (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { Link } from "@/components/i18n/Link";
 import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -6,11 +7,14 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CtaBand } from "@/components/layout/CtaBand";
 import { SERVICES, SITE } from "@/content/site";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "Services",
   description:
     "Cyber security, IT support, network solutions, data protection and consulting from KSF Tech Services.",
-};
+    alternates: await alternatesFor("/services"),
+  };
+}
 
 export default function ServicesPage() {
   return (

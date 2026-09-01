@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { Link } from "@/components/i18n/Link";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CtaBand } from "@/components/layout/CtaBand";
 import { FAQ_GROUPS, ALL_FAQS } from "@/content/faq";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "Frequently asked questions",
   description:
     "Straight answers on paying to apply, refunds, how the training works, and what the exams involve.",
-};
+    alternates: await alternatesFor("/faq"),
+  };
+}
 
 /**
  * Answers live in <details> rather than a JS accordion so every answer is

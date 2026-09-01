@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { Link } from "@/components/i18n/Link";
 import { ArrowRight, Check, X } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -7,10 +8,13 @@ import { SITE } from "@/content/site";
 import { INCLUDED, NOT_INCLUDED, PRICE_GBP } from "@/content/tracks";
 import { FAQ_GROUPS } from "@/content/faq";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "Pricing",
   description: `One subscription, every certification track, £${PRICE_GBP} a month. Not accepted? Refunded in full, automatically.`,
-};
+    alternates: await alternatesFor("/pricing"),
+  };
+}
 
 const billing = FAQ_GROUPS.find((g) => g.id === "payment")!;
 

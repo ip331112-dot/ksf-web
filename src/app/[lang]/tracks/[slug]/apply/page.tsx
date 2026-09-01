@@ -3,6 +3,7 @@ import { Link } from "@/components/i18n/Link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, BadgeCheck, Check } from "lucide-react";
 import { KsfLogo } from "@/components/brand/KsfLogo";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { ApplyFlow } from "@/components/apply/ApplyFlow";
 import { applyRequiresPayment } from "@/lib/applications/actions";
 import { TRACKS, getTrack, INCLUDED, PRICE_GBP } from "@/content/tracks";
@@ -52,13 +53,23 @@ export default async function ApplyPage({ params }: Params) {
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-3.5 lg:px-8">
           <KsfLogo />
-          <Link
-            href={`/tracks/${track.slug}`}
-            className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-ink-dim hover:text-blue-lift"
-          >
-            <ArrowLeft size={14} aria-hidden="true" />
-            {fill(t.apply.backTo, { track: track.shortName })}
-          </Link>
+          {/*
+            The flow has no site nav by design, but it still needs a way
+            to change language: everything here is translated, and an
+            applicant who arrives in the wrong one would otherwise have
+            to leave the form to fix it. The draft is keyed by track, not
+            by locale, so switching keeps their answers.
+          */}
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher label={t.nav.language} />
+            <Link
+              href={`/tracks/${track.slug}`}
+              className="inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-ink-dim hover:text-blue-lift"
+            >
+              <ArrowLeft size={14} aria-hidden="true" />
+              {fill(t.apply.backTo, { track: track.shortName })}
+            </Link>
+          </div>
         </div>
       </header>
 

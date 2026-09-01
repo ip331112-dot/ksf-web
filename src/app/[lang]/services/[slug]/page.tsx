@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { Link } from "@/components/i18n/Link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check, Mail, Phone } from "lucide-react";
@@ -20,7 +21,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return { title: service.name, description: service.summary };
+  return {
+    title: service.name,
+    description: service.summary,
+    alternates: await alternatesFor(`/services/${slug}`),
+  };
 }
 
 export default async function ServicePage({ params }: Params) {

@@ -44,21 +44,15 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s · ${SITE.name}`,
     },
     description: SITE.description,
-    /**
-     * Tells search engines the two pages are the same content in
-     * different languages rather than duplicates competing with each
-     * other. x-default points at the root, which the proxy then routes
-     * by the visitor's own preference.
+    /*
+     * No `alternates` here, on purpose.
+     *
+     * Metadata set in a layout is inherited by every page beneath it, so
+     * a canonical of "/en" makes all forty pages declare themselves
+     * duplicates of the homepage — an instruction to search engines to
+     * drop them. A layout cannot know the path, so each page states its
+     * own through alternatesFor() in @/lib/i18n/alternates.
      */
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        ...Object.fromEntries(
-          LOCALES.map((l) => [LOCALE_TAGS[l], `/${l}`]),
-        ),
-        "x-default": "/",
-      },
-    },
     openGraph: {
       title: SITE.name,
       description: SITE.description,

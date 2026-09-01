@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { Phone, Mail, Globe } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -6,11 +7,14 @@ import { CtaBand } from "@/components/layout/CtaBand";
 import { SITE, SERVICES } from "@/content/site";
 import { TRACKS, PRICE_GBP } from "@/content/tracks";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "About",
   description:
     "KSF Tech Services is a working security firm. The certification training exists because this is what we do every day.",
-};
+    alternates: await alternatesFor("/about"),
+  };
+}
 
 /**
  * ⚠️ CREDENTIALS NOT SUPPLIED.

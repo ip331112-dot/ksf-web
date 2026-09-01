@@ -3,6 +3,8 @@ import { FileText } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SITE } from "@/content/site";
+import { getDictionary } from "@/app/[lang]/dictionaries";
+import { fill } from "@/lib/locale";
 
 /**
  * Shared shell for the four legal routes.
@@ -17,7 +19,7 @@ import { SITE } from "@/content/site";
  * payments are switched on in stage 4. Each page states its own status
  * honestly rather than pretending to be complete.
  */
-export function LegalShell({
+export async function LegalShell({
   title,
   summary,
   covers,
@@ -26,6 +28,8 @@ export function LegalShell({
   summary: string;
   covers: string[];
 }) {
+  const t = await getDictionary();
+
   return (
     <>
       <SiteHeader />
@@ -33,7 +37,7 @@ export function LegalShell({
       <main id="main">
         <section className="border-b border-line bg-surface-2">
           <div className="mx-auto max-w-3xl px-5 py-16 lg:px-8 lg:py-20">
-            <span className="eyebrow text-blue-lift">Legal</span>
+            <span className="eyebrow text-blue-lift">{t.legal.eyebrow}</span>
             <h1 className="mt-3 text-4xl font-extrabold text-balance text-navy">
               {title}
             </h1>
@@ -46,25 +50,16 @@ export function LegalShell({
             <FileText size={18} className="mt-0.5 shrink-0 text-warn" aria-hidden="true" />
             <div>
               <p className="font-display font-semibold text-navy">
-                In preparation
+                {t.legal.inPreparation}
               </p>
               <p className="mt-1.5 text-[0.9rem] leading-relaxed text-ink-dim">
-                This document is being finalised and will be published before KSF
-                accepts any payment. Until then, nothing on this page forms a
-                contract. If you need this information now, email{" "}
-                <a
-                  href={`mailto:${SITE.email}`}
-                  className="font-semibold text-blue-lift hover:underline"
-                >
-                  {SITE.email}
-                </a>{" "}
-                and we will send it to you directly.
+                {fill(t.legal.inPreparationBody, { email: SITE.email })}
               </p>
             </div>
           </div>
 
           <h2 className="mt-10 font-display text-lg font-semibold text-navy">
-            What this document will cover
+            {t.legal.willCover}
           </h2>
           <ul className="mt-4 flex flex-col gap-2.5">
             {covers.map((c) => (
@@ -79,9 +74,12 @@ export function LegalShell({
           </ul>
 
           <p className="mt-10 border-t border-line pt-6 text-[0.85rem] text-ink-faint">
-            Trading as {SITE.tradingName}. Registered address {SITE.tradingAddress}.{" "}
+            {fill(t.legal.tradingAs, {
+              tradingName: SITE.tradingName,
+              tradingAddress: SITE.tradingAddress,
+            })}{" "}
             <Link href="/contact" className="font-semibold text-blue-lift hover:underline">
-              Contact us
+              {t.legal.contactUs}
             </Link>
             .
           </p>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Link } from "@/components/i18n/Link";
 import { CheckCircle2, AlertTriangle, Link2 } from "lucide-react";
 import { KsfLogo } from "@/components/brand/KsfLogo";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { SITE } from "@/content/site";
 import { isEmailConfigured } from "@/lib/email";
 import { getDictionary } from "../../dictionaries";
@@ -46,8 +47,9 @@ export default async function ApplySuccessPage({
   return (
     <>
       <header className="border-b border-line bg-surface">
-        <div className="mx-auto flex max-w-3xl items-center px-5 py-3.5 lg:px-8">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-5 py-3.5 lg:px-8">
           <KsfLogo />
+          <LanguageSwitcher label={t.nav.language} />
         </div>
       </header>
 

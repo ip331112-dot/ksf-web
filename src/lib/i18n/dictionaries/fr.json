@@ -234,5 +234,17 @@
     "noLink": "Nous n’avons pas pu créer votre lien de suivi. Écrivez à {email} en indiquant votre référence et nous vous en enverrons un.",
     "whatNext": "Une personne lit votre candidature en entier, et nous répondons sous {responseTime} avec une décision et un retour écrit — quelle qu’elle soit.",
     "receivedSubject": "Candidature reçue — {reference}"
+  },
+  "cta": {
+    "title": "Prêt à commencer ? Postulez à un parcours dès aujourd’hui.",
+    "body": "{price} £ par mois, un encadrement personnalisé, et une vraie réponse d’une vraie personne. Candidature refusée ? Vous êtes intégralement remboursé, automatiquement."
+  },
+  "legal": {
+    "eyebrow": "Mentions légales",
+    "inPreparation": "En cours de rédaction",
+    "inPreparationBody": "Ce document est en cours de finalisation et sera publié avant que KSF n’accepte le moindre paiement. D’ici là, rien sur cette page ne constitue un contrat. Si vous avez besoin de ces informations dès maintenant, écrivez à {email} et nous vous les enverrons directement.",
+    "willCover": "Ce que ce document couvrira",
+    "tradingAs": "Exerçant sous le nom de {tradingName}. Adresse enregistrée : {tradingAddress}.",
+    "contactUs": "Nous contacter"
   }
 }

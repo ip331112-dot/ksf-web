@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { LegalShell } from "@/components/legal/LegalShell";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return {
   title: "Refund policy",
   description: "Declined applicants are refunded in full, automatically. The full policy in detail.",
-};
+    alternates: await alternatesFor("/refunds"),
+  };
+}
 
 export default function RefundsPage() {
   return (

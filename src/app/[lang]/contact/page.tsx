@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import { Phone, Mail, Globe } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -14,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: t.meta.contactTitle,
     description: fill(t.meta.contactDescription, { coverage: t.common.coverage }),
+    alternates: await alternatesFor("/contact"),
   };
 }
 

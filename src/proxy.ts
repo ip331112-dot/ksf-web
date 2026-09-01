@@ -141,7 +141,21 @@ export async function proxy(request: NextRequest) {
     return redirect;
   }
 
+  /**
+   * The staff area is English only, and lives at one address.
+   *
+   * It sits under [lang] because the app needs a single root layout, not
+   * because it is translated. Serving it at /fr/admin would put
+   * `<html lang="fr-FR">` around English text, which tells a screen
+   * reader to read English with French phonetics — so the URL is
+   * corrected rather than the claim being left false.
+   */
   if (pathname.startsWith(`/${current}/admin`)) {
+    if (current !== DEFAULT_LOCALE) {
+      const url = request.nextUrl.clone();
+      url.pathname = pathname.replace(`/${current}/admin`, `/${DEFAULT_LOCALE}/admin`);
+      return NextResponse.redirect(url);
+    }
     return refreshAdminSession(request, current);
   }
 

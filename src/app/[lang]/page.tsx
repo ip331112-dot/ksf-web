@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { Link } from "@/components/i18n/Link";
+import { alternatesFor } from "@/lib/i18n/alternates";
 import {
   ArrowRight,
   ShieldCheck,
@@ -45,6 +47,14 @@ const FAQ = [
     a: "Yes, at any time, from the billing portal. It is a rolling monthly subscription with no minimum term.",
   },
 ];
+
+/**
+ * Title and description come from the root layout; only the canonical
+ * has to be stated here, because a layout cannot know the path.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  return { alternates: await alternatesFor("") };
+}
 
 export default async function HomePage() {
   const t = await getDictionary();

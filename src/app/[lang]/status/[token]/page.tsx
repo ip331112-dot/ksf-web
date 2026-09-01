@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { notFound } from "next/navigation";
 import { Check, Clock, MessageSquare, ShieldQuestion } from "lucide-react";
 import { KsfLogo } from "@/components/brand/KsfLogo";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SITE } from "@/content/site";
 import { getTrack } from "@/content/tracks";
@@ -158,8 +159,9 @@ export default async function StatusPage({
   return (
     <>
       <header className="border-b border-line bg-surface">
-        <div className="mx-auto flex max-w-3xl items-center px-5 py-3.5 lg:px-8">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-5 py-3.5 lg:px-8">
           <KsfLogo />
+          <LanguageSwitcher label={t.nav.language} />
         </div>
       </header>
 
