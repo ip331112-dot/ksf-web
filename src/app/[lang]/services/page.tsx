@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { alternatesFor } from "@/lib/i18n/alternates";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import { Link } from "@/components/i18n/Link";
 import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -8,10 +9,10 @@ import { CtaBand } from "@/components/layout/CtaBand";
 import { SERVICES, SITE } from "@/content/site";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
   return {
-  title: "Services",
-  description:
-    "Cyber security, IT support, network solutions, data protection and consulting from KSF Tech Services.",
+    title: t.meta.servicesTitle,
+    description: t.meta.servicesDescription,
     alternates: await alternatesFor("/services"),
   };
 }

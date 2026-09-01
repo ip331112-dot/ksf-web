@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { alternatesFor } from "@/lib/i18n/alternates";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import { LegalShell } from "@/components/legal/LegalShell";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
   return {
-  title: "Cookie policy",
-  description: "What this site stores in your browser, and why.",
+    title: t.meta.cookiesTitle,
+    description: t.meta.cookiesDescription,
     alternates: await alternatesFor("/cookies"),
   };
 }

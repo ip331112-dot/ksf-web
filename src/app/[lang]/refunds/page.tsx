@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { alternatesFor } from "@/lib/i18n/alternates";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import { LegalShell } from "@/components/legal/LegalShell";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
   return {
-  title: "Refund policy",
-  description: "Declined applicants are refunded in full, automatically. The full policy in detail.",
+    title: t.meta.refundsTitle,
+    description: t.meta.refundsDescription,
     alternates: await alternatesFor("/refunds"),
   };
 }

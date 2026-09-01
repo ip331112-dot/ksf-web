@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Archivo, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { SITE } from "@/content/site";
-import { LOCALES, LOCALE_TAGS } from "@/lib/locale";
+import { LOCALES, LOCALE_TAGS, fill } from "@/lib/locale";
 import { getDictionary, getLocale } from "./dictionaries";
+import { PRICE_GBP } from "@/content/tracks";
 import "../globals.css";
 
 const archivo = Archivo({
@@ -36,14 +37,16 @@ export function generateStaticParams() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
+  const t = await getDictionary();
+  const description = fill(t.meta.siteDescription, { price: PRICE_GBP });
 
   return {
     metadataBase: new URL(SITE.url),
     title: {
-      default: `${SITE.name} — Certification training and cyber security`,
+      default: t.meta.siteTitle,
       template: `%s · ${SITE.name}`,
     },
-    description: SITE.description,
+    description,
     /*
      * No `alternates` here, on purpose.
      *
@@ -55,7 +58,7 @@ export async function generateMetadata(): Promise<Metadata> {
      */
     openGraph: {
       title: SITE.name,
-      description: SITE.description,
+      description,
       url: `${SITE.url}/${locale}`,
       siteName: SITE.name,
       locale: LOCALE_TAGS[locale].replace("-", "_"),

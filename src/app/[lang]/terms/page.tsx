@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { alternatesFor } from "@/lib/i18n/alternates";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import { LegalShell } from "@/components/legal/LegalShell";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
   return {
-  title: "Terms of service",
-  description: "The terms under which KSF Tech Services provides certification training and services.",
+    title: t.meta.termsTitle,
+    description: t.meta.termsDescription,
     alternates: await alternatesFor("/terms"),
   };
 }

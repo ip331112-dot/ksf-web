@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { alternatesFor } from "@/lib/i18n/alternates";
+import { getDictionary } from "@/app/[lang]/dictionaries";
+import { fill } from "@/lib/locale";
 import { Link } from "@/components/i18n/Link";
 import { ArrowRight, Check, X } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -9,9 +11,10 @@ import { INCLUDED, NOT_INCLUDED, PRICE_GBP } from "@/content/tracks";
 import { FAQ_GROUPS } from "@/content/faq";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
   return {
-  title: "Pricing",
-  description: `One subscription, every certification track, £${PRICE_GBP} a month. Not accepted? Refunded in full, automatically.`,
+    title: t.meta.pricingTitle,
+    description: fill(t.meta.pricingDescription, { price: PRICE_GBP }),
     alternates: await alternatesFor("/pricing"),
   };
 }

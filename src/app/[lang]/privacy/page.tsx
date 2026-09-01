@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { alternatesFor } from "@/lib/i18n/alternates";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import { LegalShell } from "@/components/legal/LegalShell";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
   return {
-  title: "Privacy policy",
-  description: "How KSF Tech Services collects, uses and protects your personal data under UK GDPR.",
+    title: t.meta.privacyTitle,
+    description: t.meta.privacyDescription,
     alternates: await alternatesFor("/privacy"),
   };
 }

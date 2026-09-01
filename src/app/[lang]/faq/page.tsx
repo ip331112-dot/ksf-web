@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { alternatesFor } from "@/lib/i18n/alternates";
+import { getDictionary } from "@/app/[lang]/dictionaries";
 import { Link } from "@/components/i18n/Link";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -7,10 +8,10 @@ import { CtaBand } from "@/components/layout/CtaBand";
 import { FAQ_GROUPS, ALL_FAQS } from "@/content/faq";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
   return {
-  title: "Frequently asked questions",
-  description:
-    "Straight answers on paying to apply, refunds, how the training works, and what the exams involve.",
+    title: t.meta.faqTitle,
+    description: t.meta.faqDescription,
     alternates: await alternatesFor("/faq"),
   };
 }
