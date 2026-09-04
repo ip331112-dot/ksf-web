@@ -11,7 +11,7 @@ export function AdminHeader({
   active,
 }: {
   email?: string | null;
-  active: "enquiries" | "applications";
+  active: "enquiries" | "applications" | "shop" | "orders";
 }) {
   const tab = (href: string, label: string, key: string) => (
     <Link
@@ -37,6 +37,8 @@ export function AdminHeader({
           <nav className="flex items-end gap-4" aria-label="Admin sections">
             {tab("/admin", "Enquiries", "enquiries")}
             {tab("/admin/applications", "Applications", "applications")}
+            {tab("/admin/shop", "Shop", "shop")}
+            {tab("/admin/orders", "Orders", "orders")}
           </nav>
         </div>
         <div className="flex items-center gap-4">

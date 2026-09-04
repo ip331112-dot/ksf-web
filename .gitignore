@@ -50,3 +50,6 @@ next-env.d.ts
 .tools/
 *.log
 deploy-preview.ps1
+
+# Local progress state for scripts/migrate-chunk.mjs — machine-specific, not source
+.migrate-chunk-state.json

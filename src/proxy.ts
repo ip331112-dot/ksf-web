@@ -164,11 +164,18 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   /**
-   * Everything except Next internals, the SEO files and anything with a
-   * file extension. robots.txt and sitemap.xml must never gain a locale
-   * prefix — crawlers look for them at the root.
+   * Everything except Next internals, the SEO files, API routes and
+   * anything with a file extension.
+   *
+   * robots.txt and sitemap.xml must never gain a locale prefix —
+   * crawlers look for them at the root.
+   *
+   * `api` was added when the shop's download route arrived, the first
+   * API route in the app. Without it /api/download/<token> was rewritten
+   * to /en/api/download/<token>, which matches no route: every download
+   * link would have 404'd. Caught by a smoke test, not by reasoning.
    */
   matcher: [
-    "/((?!_next|favicon.ico|robots.txt|sitemap.xml|.*\\.[\\w]+$).*)",
+    "/((?!_next|api|favicon.ico|robots.txt|sitemap.xml|.*\\.[\\w]+$).*)",
   ],
 };

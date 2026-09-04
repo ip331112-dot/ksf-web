@@ -150,6 +150,7 @@ export const HOW_IT_WORKS = [
 export const NAV = [
   { href: "/tracks", key: "tracks" },
   { href: "/services", key: "services" },
+  { href: "/shop", key: "shop" },
   { href: "/pricing", key: "pricing" },
   { href: "/about", key: "about" },
   { href: "/contact", key: "contact" },
