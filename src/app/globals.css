@@ -2,27 +2,32 @@
 
 /* ===================================================================
    KSF TECH SERVICES — brand tokens
-   Derived from the logo and flyer. Single source of truth.
-   No colour is ever hand-typed into a component.
+   Single source of truth. No colour is ever hand-typed into a component.
    =================================================================== */
 
 /* -------------------------------------------------------------------
-   DARK THEME, RED ACCENT — adopted 2026-08-27 after comparing three
-   palettes side by side. The owner chose this over the navy/blue
-   original knowingly, having seen both.
+   BLACK / RED CINEMATIC THEME — adopted 2026-09-08, replacing the
+   earlier dark-neutral theme with a red accent.
+
+   The design principle, and the reason several values look extreme:
+   black carries 70-80% of the visual area, dark crimson supplies
+   atmosphere, and bright red is spent ONLY on CTAs, borders, icons and
+   accents. White is the primary type colour.
 
    READ THIS BEFORE EDITING A COLOUR
-   The token NAMES are historical and several of them now lie:
+   The token NAMES are historical and several of them lie:
 
-     --color-navy   is the HEADING ink, and it is near-white.
+     --color-navy   is the HEADING ink, and it is pure white.
                     117 components say `text-navy` for a heading; keeping
                     the name meant repainting the site by changing one
                     value instead of touching every file.
      --color-blue   is the ACCENT, and it is red. Same reasoning:
                     97 `text-blue`, 36 `border-blue`, 20 `bg-blue`.
-     --color-navy-3 is the darker accent used for button hover states.
-     --color-band   is new — the genuinely dark surface that `bg-navy`
-                    used to provide (admin header), now that navy is light.
+     --color-blue-lift is the BRIGHT accent — accent text, and the hover
+                    state every CTA already reaches through the
+                    `hover:bg-blue-lift` it was written with.
+     --color-navy-3 is the deep red used for pressed states.
+     --color-band   is the genuinely dark chrome surface (admin header).
 
    Renaming them properly is a ~150-file mechanical diff and worth doing
    one day. It is not worth doing in the same change as a repaint, where
@@ -30,40 +35,81 @@
    ------------------------------------------------------------------- */
 
 @theme {
+  /* Atmosphere — the raw grounds the background layers are built from */
+  --background-dark: #040000;
+  --background-red: #140001;
+  --background-crimson: #300005;
+
   /* Core palette */
-  --color-navy: #f5f7fa;        /* heading ink (see note above) */
-  --color-navy-2: #3a4150;      /* mid border that reads on dark */
-  --color-navy-3: #a8152a;      /* accent, pressed/hover */
-  --color-blue: #e01e37;        /* ACCENT */
-  --color-blue-lift: #ff6b7d;   /* accent TEXT on dark — 6.99:1 on ground */
-  --color-blue-soft: #2a1116;   /* accent tint for pills and panels */
-  --color-red: #ff5a5a;         /* semantic: error, overdue, destructive */
+  --color-navy: #ffffff;                    /* heading ink (see note above) */
+  --color-navy-2: rgba(239, 68, 68, 0.35);  /* mid border that reads on black */
+  --color-navy-3: #8b0000;                  /* deep red, pressed states */
+  --color-blue: #ef4444;                    /* ACCENT — CTAs, icons, borders */
+  --color-blue-lift: #ff1f2d;               /* BRIGHT accent — text and CTA
+                                               hover. 5.5:1 on black. */
+  --color-blue-soft: #300005;               /* accent tint for pills and panels */
+  --color-mark: #ff6b6b;                    /* the header lockup ONLY, paired
+                                               with --font-mark. A lifted red:
+                                               same hue as the accent, ~40%
+                                               more luminance, 7.5:1 on black
+                                               against the accent's 5.6:1.
+                                               The lockup is small, light-weight
+                                               and widely tracked, so it needs
+                                               more lift than a CTA does — and
+                                               it is deliberately its own token
+                                               so brightening the logo can never
+                                               brighten a button. */
+  --color-red: #ff8a8a;                     /* semantic: error, overdue,
+                                               destructive. Deliberately lighter
+                                               than the accent so the two stay
+                                               apart in an all-red theme. */
   --color-red-soft: #2b1215;
 
-  /* Surfaces and text — neutrals biased slightly warm toward the accent */
-  --color-ground: #0d0f12;      /* page */
-  --color-surface: #16191e;     /* cards, panels, inputs */
-  --color-surface-2: #101317;   /* alternating bands, inset areas */
-  --color-line: #2f3641;      /* dividers and card edges */
-  --color-field: #626d81;     /* form field borders — 3.0:1, the WCAG
-                                 minimum for a UI boundary. Deliberately
-                                 stronger than --color-line: a divider may
-                                 whisper, a field you must find cannot. */
-  --color-line-soft: #21262d;
-  --color-ink: #e7eaef;         /* body copy */
-  --color-ink-dim: #a9b0bb;
-  --color-ink-faint: #8b95a5;   /* 6.34:1 on ground, 5.82:1 on surface */
-  --color-band: #101317;        /* dark chrome: admin header */
+  /* Surfaces — black ground, near-black cards that float above it */
+  --color-ground: #000000;                  /* page */
+  --color-surface: #080317;                 /* cards, panels, inputs */
+  --color-surface-2: #10000a;               /* alternating bands, inset areas */
+  --color-line: rgba(239, 68, 68, 0.20);    /* card edges and dividers */
+  --color-line-soft: rgba(239, 68, 68, 0.10);
+  --color-field: #6b6570;                   /* form field borders — 3.7:1 on
+                                               black, against a WCAG minimum of
+                                               3:1 for a UI boundary.
+                                               Deliberately NEUTRAL, not red: a
+                                               red field border reads as an
+                                               error state, and --color-red is
+                                               right there. */
+  --color-ink: #e5e5e5;                     /* body copy */
+  --color-ink-dim: #a3a3a3;
+  --color-ink-faint: #8f8f8f;               /* 6.5:1 on black */
+  --color-band: #040000;                    /* dark chrome: admin header */
 
-  /* Semantic — lifted for legibility on a dark ground */
+  /* Semantic — green and amber survive the repaint because they are the
+     only things left that are not red, and that is what makes them read. */
   --color-ok: #35c98a;
   --color-ok-soft: #0f2a1f;
   --color-warn: #e2a33f;
 
-  /* Type */
-  --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
-  --font-sans: var(--font-plex-sans), "Segoe UI", system-ui, sans-serif;
+  /* Glows */
+  --border-red: rgba(239, 68, 68, 0.25);
+  --red-glow: rgba(239, 68, 68, 0.35);
+  --strong-red-glow: rgba(255, 31, 45, 0.45);
+
+  /* Type — Inter throughout. Display and body are the same face at
+     different weights, which is the modern SaaS convention and what the
+     reference uses; the slab serif it replaces fought the imagery. */
+  --font-display: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, Consolas, monospace;
+
+  /* The futuristic face. Deliberately NOT --font-display: that token is
+     worn by every h1-h4 on the site plus ~20 `font-display` utilities in
+     the admin, and Orbitron at 14px in a table cell is unreadable. This
+     one is opt-in, and only `hero-title` and `stat-figure` opt in. */
+  --font-tech: var(--font-orbitron), "Eurostile", "Michroma", sans-serif;
+
+  /* The header wordmark only. Thin, geometric, wide — see the note on
+     the Jura import in layout.tsx for why this one and not Orbitron. */
+  --font-mark: var(--font-jura), "Eurostile", "Century Gothic", sans-serif;
 
   /* Rhythm */
   --spacing-section: 5.5rem;
@@ -77,6 +123,10 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* The canvas colour. It lives on <html> rather than on <body> so that
+       body::before — which paints the atmosphere at z-index -1 — is not
+       hidden behind the background box of body itself. */
+    background-color: var(--color-ground);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -89,9 +139,7 @@
   }
 
   body {
-    /* The page ground, not the card surface — they are different values
-       now that the theme is dark. */
-    background-color: var(--color-ground);
+    /* No background-color here on purpose — see the note on <html>. */
     color: var(--color-ink);
     font-family: var(--font-sans);
     line-height: 1.62;
@@ -99,16 +147,44 @@
     text-rendering: optimizeLegibility;
   }
 
+  /*
+   * The cinematic ground: a black-to-crimson wash, two large red radials
+   * for atmosphere, and two barely-there diagonal seams standing in for
+   * abstract geometry.
+   *
+   * Painted on a fixed pseudo-element rather than with
+   * `background-attachment: fixed`, which iOS Safari does not honour —
+   * there the wash would scroll and band. Fixed also sizes it to the
+   * viewport, so it reads the same on a 600px phone as on a shop listing
+   * 12,000px tall, instead of stretching over the scroll height.
+   */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      /* geometry, lowest opacity, sitting on top of the wash */
+      linear-gradient(115deg, transparent 47%, rgba(239, 68, 68, 0.05) 48%, transparent 50%),
+      linear-gradient(64deg, transparent 61%, rgba(239, 68, 68, 0.035) 62%, transparent 64%),
+      /* atmosphere */
+      radial-gradient(circle at 50% 78%, rgba(255, 31, 45, 0.2), transparent 46%),
+      radial-gradient(circle at 10% 4%, rgba(239, 68, 68, 0.1), transparent 38%),
+      /* the wash itself */
+      linear-gradient(135deg, #000000 0%, #080000 40%, #140001 70%, #300005 100%);
+  }
+
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     text-wrap: balance;
-    letter-spacing: -0.018em;
-    line-height: 1.1;
+    letter-spacing: -0.028em;
+    line-height: 1.06;
   }
 
   p { text-wrap: pretty; }
 
-  /* Visible keyboard focus, brand blue, everywhere */
+  /* Visible keyboard focus, brand accent, everywhere */
   :focus-visible {
     outline: 2px solid var(--color-blue);
     outline-offset: 3px;
@@ -118,6 +194,80 @@
   ::selection {
     background-color: var(--color-blue);
     color: #fff;
+  }
+}
+
+/* ===================================================================
+   Components
+
+   These sit in @layer components so that every Tailwind utility still
+   wins over them. That is the point: the rules below add the shadow,
+   glow and lift that no utility sets, while `hover:bg-blue-lift` and
+   friends keep control of colour exactly as they do today.
+   =================================================================== */
+
+@layer components {
+  /*
+   * Cards float above the black. Form controls are excluded — a 50px
+   * drop shadow on a text input reads as a rendering bug, not as depth.
+   *
+   * This one CAN live in @layer components: nothing sets a `shadow-*`
+   * utility on a card today, and if something ever does, the utility
+   * winning is the outcome you want.
+   */
+  .bg-surface:not(input):not(textarea):not(select) {
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* -------------------------------------------------------------------
+   Primary CTA — deliberately UNLAYERED.
+
+   Scoped to <a> and <button> rather than to `.bg-blue` alone, because
+   the accent is also worn by non-interactive pills — the hero kicker is
+   a <span class="bg-blue"> — which must not offer a hover lift they
+   cannot act on.
+
+   It sits outside @layer because every one of these buttons already
+   carries `transition-colors`, and a utility beats @layer components no
+   matter how specific the selector is. Inside a layer, `transition` here
+   lost, transition-property stayed `color, background-color, …`, and the
+   glow and the lift both snapped instead of easing. Unlayered rules beat
+   all layered ones, so the transition lands.
+
+   Colour is left to the utilities on purpose: `hover:bg-blue-lift` is
+   already written on every CTA in the codebase and resolves to the
+   bright red the design asks for, so background-color is not set here.
+   ------------------------------------------------------------------- */
+
+a.bg-blue,
+button.bg-blue {
+  box-shadow: 0 0 30px var(--red-glow);
+  transition:
+    background-color 150ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+a.bg-blue:hover,
+button.bg-blue:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px var(--strong-red-glow);
+}
+
+a.bg-blue:active,
+button.bg-blue:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button.bg-blue:disabled {
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a.bg-blue:hover,
+  button.bg-blue:hover:not(:disabled) {
+    transform: none;
   }
 }
 
@@ -133,11 +283,100 @@
 }
 
 /* Dark band used by the hero, CTA strips and footer. Named for history,
-   not for navy — the glow is the accent red now. */
+   not for navy — it is the cinematic wash now, with the red radial
+   pulled up behind the content. */
 @utility bg-navy-grad {
   background-image:
-    radial-gradient(120% 140% at 88% -20%, rgba(224, 30, 55, 0.22), transparent 62%),
-    linear-gradient(158deg, #16191e 0%, #0d0f12 100%);
+    radial-gradient(circle at 50% 70%, rgba(255, 31, 45, 0.25), transparent 45%),
+    radial-gradient(120% 140% at 88% -20%, rgba(239, 68, 68, 0.18), transparent 62%),
+    linear-gradient(135deg, #000000 0%, #080000 40%, #140001 70%, #300005 100%);
+}
+
+/* Section divider: a red gradient that fades out at both ends, instead
+   of a hairline that stops dead. Use on an <hr> or an empty <div>. */
+@utility rule-glow {
+  height: 1px;
+  border: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgba(239, 68, 68, 0.4),
+    transparent
+  );
+}
+
+/* Content imagery — photographs, not the logo. The radius and the glow
+   are what stop a rectangular JPEG looking pasted onto the black. */
+@utility img-atmos {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(239, 68, 68, 0.25);
+}
+
+/*
+ * The hero headline: futuristic, wide, glowing.
+ *
+ * The look is NOT the size — it is the combination of Orbitron's squared
+ * geometry, the tracking, a weight light enough to stay airy, and a line
+ * height loose enough that the glow of one line does not bleed into the
+ * next. At 1.06 (the site default for headings) the red halos overlap and
+ * the whole block turns into a smear, which is why line-height is set
+ * here rather than inherited.
+ *
+ * Tracking widens with the viewport: 0.10em / 0.12em / 0.14em. Wide
+ * tracking IS the effect, but it is not free, and the base step is the
+ * one that had to give.
+ *
+ * Why the base is 22px and not the 28px the design calls for: the French
+ * hero contains CYBERSÉCURITÉ, thirteen uppercase characters in a face
+ * whose glyphs are unusually wide. With a 28px floor the clamp cannot
+ * shrink below 28px however narrow the screen gets, and at 320px that
+ * word pushed the page to a 382px scrollWidth — a horizontal scrollbar
+ * on the homepage. Measured, not guessed. The 28px floor is restored at
+ * 480px and up, where it fits, so every real phone still gets it.
+ *
+ * overflow-wrap is the backstop: if a longer word ever lands in this
+ * slot, it breaks instead of breaking the page.
+ */
+@utility hero-title {
+  font-family: var(--font-tech);
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  font-size: clamp(22px, 7vw, 44px);
+  overflow-wrap: break-word;
+  text-shadow:
+    0 0 5px rgba(255, 255, 255, 0.8),
+    0 0 12px rgba(255, 31, 45, 0.7),
+    0 0 25px rgba(255, 31, 45, 0.45);
+
+  @media (min-width: 480px) {
+    letter-spacing: 0.12em;
+    font-size: clamp(28px, 8vw, 44px);
+  }
+
+  @media (min-width: 768px) {
+    letter-spacing: 0.14em;
+    font-size: clamp(34px, 6vw, 55px);
+  }
+
+  @media (min-width: 1024px) {
+    font-size: clamp(42px, 5vw, 76px);
+  }
+}
+
+/* Headline figures: the price, and any count that has to carry a
+   section on its own. Orbitron at 700 — the one weight where its digits
+   read as engineered rather than merely wide. */
+@utility stat-figure {
+  font-family: var(--font-tech);
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--color-navy);
 }
 
 @utility tabular {

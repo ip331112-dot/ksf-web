@@ -75,15 +75,15 @@ export default function AboutPage() {
               </h2>
               <p className="text-ink-dim">
                 Anyone can take money and hand over a login. We would rather know
-                that the track you picked is the right one for where you actually
-                are, because someone set loose on an advanced track without the
+                that the course you picked is the right one for where you actually
+                are, because someone set loose on an advanced course without the
                 groundwork does not fail gracefully — they lose months.
               </p>
               <p className="text-ink-dim">
                 So every application gets read and answered within{" "}
                 {SITE.responseTime}, with written feedback rather than silence. If
                 the answer is no, the £{PRICE_GBP} comes straight back
-                automatically. If a different track suits you better, we say so.
+                automatically. If a different course suits you better, we say so.
               </p>
 
               {CREDENTIALS && (

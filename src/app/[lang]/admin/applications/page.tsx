@@ -137,7 +137,7 @@ export default async function ApplicationsQueue() {
               No applications yet
             </h2>
             <p className="max-w-md text-[0.875rem] text-ink-dim">
-              Applications from the eight track pages arrive here, oldest
+              Applications from the eight course pages arrive here, oldest
               first.
             </p>
           </div>

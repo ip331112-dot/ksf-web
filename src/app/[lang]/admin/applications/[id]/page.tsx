@@ -168,7 +168,7 @@ export default async function ApplicationDetail({
             <section className="border border-line bg-surface p-5">
               <h2 className="font-display font-semibold text-navy">Motivation</h2>
               <dl className="mt-3 flex flex-col gap-3">
-                <Detail label="Why this track" value={app.motivation} />
+                <Detail label="Why this course" value={app.motivation} />
                 <Detail label="Goals" value={app.goals ?? "—"} />
                 <Detail
                   label="Hours a week"

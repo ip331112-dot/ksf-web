@@ -1,5 +1,5 @@
 import { Link } from "@/components/i18n/Link";
-import { KsfLogo } from "@/components/brand/KsfLogo";
+import { KsfWordmark } from "@/components/brand/KsfWordmark";
 import { NAV } from "@/content/site";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -21,9 +21,15 @@ export async function SiteHeader() {
   }));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur supports-[backdrop-filter]:bg-surface/85">
+    /*
+      Black glass. The base sits at 90% for browsers without
+      backdrop-filter, where a 75% bar would let the page scroll through
+      it illegibly; where the blur is supported it drops to the 75% the
+      design calls for and the blur carries the separation.
+    */
+    <header className="sticky top-0 z-40 border-b border-line bg-black/90 backdrop-blur-[15px] supports-[backdrop-filter]:bg-black/75">
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-5 lg:px-8">
-        <KsfLogo />
+        <KsfWordmark className="text-[0.64rem] min-[420px]:text-[0.72rem] sm:text-[0.8rem]" />
 
         {/* Desktop nav */}
         <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">

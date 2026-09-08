@@ -69,7 +69,7 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/shop/[s
         <div className="mt-6 grid gap-10 lg:grid-cols-2">
           {/* Photos ------------------------------------------------- */}
           <div>
-            <div className="flex aspect-4/3 items-center justify-center border border-line bg-surface-2">
+            <div className="img-atmos flex aspect-4/3 items-center justify-center border border-line bg-surface-2">
               {cover ? (
                 // eslint-disable-next-line @next/next/no-img-element -- see ProductCard
                 <img
@@ -89,7 +89,7 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/shop/[s
             {rest.length > 0 && (
               <ul className="mt-3 grid grid-cols-4 gap-3">
                 {rest.map((img) => (
-                  <li key={img.id} className="aspect-square border border-line bg-surface-2">
+                  <li key={img.id} className="img-atmos aspect-square border border-line bg-surface-2">
                     {/* eslint-disable-next-line @next/next/no-img-element -- see ProductCard */}
                     <img
                       src={imageUrl(img.path)}

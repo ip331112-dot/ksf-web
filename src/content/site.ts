@@ -127,7 +127,7 @@ export const PROMISES = [
 export const HOW_IT_WORKS = [
   {
     step: "01",
-    title: "Choose your track",
+    title: "Choose your course",
     body: "Pick the certification that matches where you are and where you are heading.",
   },
   {

@@ -1,6 +1,6 @@
 {
   "nav": {
-    "tracks": "Parcours",
+    "tracks": "Cours",
     "services": "Services",
     "pricing": "Tarifs",
     "about": "À propos",
@@ -16,25 +16,25 @@
   },
   "home": {
     "kicker": "La cybersécurité d'abord",
-    "strapline": "La tranquillité d'esprit, toujours",
-    "intro": "Une préparation encadrée aux certifications que les employeurs demandent réellement — CompTIA, Cisco et EC-Council. Un seul abonnement, tous les parcours, {price} £ par mois.",
-    "browseTracks": "Voir les parcours",
+    "strapline": "Apprenez la cybersécurité depuis zéro pour {price} £ par mois",
+    "intro": "Une préparation encadrée aux certifications que les employeurs demandent réellement — CompTIA, Cisco et EC-Council. Un seul abonnement, tous les cours, {price} £ par mois.",
+    "browseTracks": "Voir les cours",
     "talkToUs": "Nous contacter",
-    "tracksEyebrow": "Parcours de certification",
+    "tracksEyebrow": "Cours de certification",
     "howEyebrow": "Comment ça marche",
     "servicesEyebrow": "Nos autres services",
     "whyEyebrow": "Pourquoi KSF",
     "questionsEyebrow": "Questions"
   },
   "tracks": {
-    "title": "Tous les parcours, un seul abonnement",
-    "eyebrow": "Parcours de certification",
-    "intro": "Chaque parcours suit le programme d'examen publié par l'éditeur et est encadré par une personne qui a passé cet examen. Chaque candidature est examinée individuellement — choisissez le parcours qui correspond à votre niveau actuel, pas à celui que vous visez.",
+    "title": "Tous les cours, un seul abonnement",
+    "eyebrow": "Cours de certification",
+    "intro": "Chaque cours suit le programme d'examen publié par l'éditeur et est encadré par une personne qui a passé cet examen. Chaque candidature est examinée individuellement — choisissez le cours qui correspond à votre niveau actuel, pas à celui que vous visez.",
     "from": "À partir de {price} £",
-    "notSureTitle": "Vous hésitez sur le parcours ?",
-    "notSureBody": "Dites-nous où vous en êtes et ce que vous visez. Nous vous orienterons vers le bon parcours — quitte à vous conseiller d'attendre.",
+    "notSureTitle": "Vous hésitez sur le cours ?",
+    "notSureBody": "Dites-nous où vous en êtes et ce que vous visez. Nous vous orienterons vers le bon cours — quitte à vous conseiller d'attendre.",
     "askUs": "Nous écrire",
-    "applyForTrack": "Postuler à ce parcours",
+    "applyForTrack": "Postuler à ce cours",
     "perMonth": "/ mois",
     "rolling": "Mensuel, sans engagement. Résiliable à tout moment.",
     "refundNote": "Candidature refusée ? Votre abonnement est annulé et intégralement remboursé, automatiquement."
@@ -50,7 +50,7 @@
       "experience": "Expérience",
       "experienceBlurb": "Votre point de départ.",
       "motivation": "Motivation",
-      "motivationBlurb": "Pourquoi ce parcours, et votre disponibilité.",
+      "motivationBlurb": "Pourquoi ce cours, et votre disponibilité.",
       "review": "Récapitulatif",
       "reviewBlurb": "Vérifiez et envoyez."
     },
@@ -75,7 +75,7 @@
       "experienced": "Je travaille déjà dans ce domaine"
     },
     "review": {
-      "track": "Parcours",
+      "track": "Cours",
       "name": "Nom",
       "email": "E-mail",
       "phone": "Téléphone",
@@ -123,14 +123,14 @@
     "applyFallback": "L'envoi a échoué. Écrivez-nous à {email} et nous enregistrerons votre candidature manuellement.",
     "rateLimited": "Cela fait plusieurs messages en peu de temps. Merci d'attendre {minutes} minutes, ou écrivez à {email}.",
     "applyRateLimited": "Cela fait plusieurs candidatures en peu de temps. Merci de patienter, ou écrivez à {email}.",
-    "trackNotFound": "Ce parcours est introuvable. Merci de recommencer depuis la page du parcours.",
+    "trackNotFound": "Ce cours est introuvable. Merci de recommencer depuis la page du cours.",
     "checkFailed": "La vérification a échoué. Merci de réessayer.",
     "verificationFailed": "La vérification a échoué."
   },
   "contact": {
     "eyebrow": "Contact",
     "title": "Parlons-en",
-    "intro": "À propos d'un service, d'un projet, ou du parcours de certification qui vous convient. Nous répondons sous {responseTime}.",
+    "intro": "À propos d'un service, d'un projet, ou du cours de certification qui vous convient. Nous répondons sous {responseTime}.",
     "sendEnquiry": "Envoyer une demande",
     "sendButton": "Envoyer",
     "whatAbout": "De quoi s'agit-il ?",
@@ -197,14 +197,14 @@
   },
   "common": {
     "readMore": "En savoir plus",
-    "allTracks": "Tous les parcours",
+    "allTracks": "Tous les cours",
     "getInvolved": "Participer",
     "submitted": "envoyée",
     "responseTime": "3 jours ouvrés",
     "coverage": "Service dans le monde entier"
   },
   "footer": {
-    "tracks": "Parcours",
+    "tracks": "Cours",
     "services": "Services",
     "company": "L’entreprise",
     "legal": "Mentions légales",
@@ -217,20 +217,20 @@
     "followUs": "Suivre KSF"
   },
   "meta": {
-    "tracksTitle": "Parcours de certification",
-    "tracksDescription": "Huit parcours de préparation aux examens CompTIA, Cisco et EC-Council. Un seul abonnement, un encadrement personnalisé, {price} £ par mois.",
+    "tracksTitle": "Cours de certification",
+    "tracksDescription": "Huit cours de préparation aux examens CompTIA, Cisco et EC-Council. Un seul abonnement, un encadrement personnalisé, {price} £ par mois.",
     "contactTitle": "Contact",
     "contactDescription": "Contactez KSF Tech Services pour la cybersécurité, le support informatique, les réseaux, la protection des données ou le conseil. {coverage}.",
     "successTitle": "Candidature reçue",
     "statusTitle": "Votre candidature",
     "applyTitle": "Candidature — {track}",
-    "applyDescription": "Postulez au parcours {track} avec KSF Tech Services.",
+    "applyDescription": "Postulez au cours {track} avec KSF Tech Services.",
     "siteTitle": "KSF Tech Services — Formation certifiante et cybersécurité",
     "siteDescription": "Formation certifiante et services de cybersécurité par KSF Tech Services. Préparez les examens CompTIA, Cisco et EC-Council avec un encadrement personnalisé, à partir de {price} £ par mois.",
     "servicesTitle": "Services",
     "servicesDescription": "Cybersécurité, support informatique, solutions réseau, protection des données et conseil par KSF Tech Services.",
     "pricingTitle": "Tarifs",
-    "pricingDescription": "Un seul abonnement, tous les parcours de certification, {price} £ par mois. Candidature refusée ? Remboursement intégral, automatiquement.",
+    "pricingDescription": "Un seul abonnement, tous les cours de certification, {price} £ par mois. Candidature refusée ? Remboursement intégral, automatiquement.",
     "aboutTitle": "À propos",
     "aboutDescription": "KSF Tech Services est une entreprise de sécurité en activité. La formation certifiante existe parce que c’est notre métier au quotidien.",
     "faqTitle": "Questions fréquentes",
@@ -261,7 +261,7 @@
     "receivedSubject": "Candidature reçue — {reference}"
   },
   "cta": {
-    "title": "Prêt à commencer ? Postulez à un parcours dès aujourd’hui.",
+    "title": "Prêt à commencer ? Postulez à un cours dès aujourd’hui.",
     "body": "{price} £ par mois, un encadrement personnalisé, et une vraie réponse d’une vraie personne. Candidature refusée ? Vous êtes intégralement remboursé, automatiquement."
   },
   "legal": {

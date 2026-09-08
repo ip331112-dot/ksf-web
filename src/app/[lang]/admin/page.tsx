@@ -139,7 +139,7 @@ export default async function AdminDashboard() {
                 </h2>
                 <p className="max-w-md text-[0.875rem] text-ink-dim">
                   Enquiries from the contact page, the five service pages and
-                  the track apply pages all arrive here, newest first. Nothing
+                  the course apply pages all arrive here, newest first. Nothing
                   has come in yet.
                 </p>
                 <Link

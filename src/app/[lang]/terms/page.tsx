@@ -16,7 +16,7 @@ export default function TermsPage() {
   return (
     <LegalShell
       title="Terms of service"
-      summary="The agreement between you and KSF Tech Services when you apply for a track or engage us for a service."
+      summary="The agreement between you and KSF Tech Services when you apply for a course or engage us for a service."
       covers={[
         "Who we are, and how to contact us",
         "What the subscription entitles you to, and what it does not",

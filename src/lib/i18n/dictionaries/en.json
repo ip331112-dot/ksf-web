@@ -1,6 +1,6 @@
 {
   "nav": {
-    "tracks": "Tracks",
+    "tracks": "Courses",
     "services": "Services",
     "pricing": "Pricing",
     "about": "About",
@@ -16,25 +16,25 @@
   },
   "home": {
     "kicker": "Cyber safety first",
-    "strapline": "Peace of mind always",
-    "intro": "Mentored preparation for the certifications employers actually ask for — CompTIA, Cisco and EC-Council. One subscription, every track, £{price} a month.",
-    "browseTracks": "Browse tracks",
+    "strapline": "Learn cyber security from scratch for £{price} a month",
+    "intro": "Mentored preparation for the certifications employers actually ask for — CompTIA, Cisco and EC-Council. One subscription, every course, £{price} a month.",
+    "browseTracks": "Browse courses",
     "talkToUs": "Talk to us",
-    "tracksEyebrow": "Certification tracks",
+    "tracksEyebrow": "Certification courses",
     "howEyebrow": "How it works",
     "servicesEyebrow": "What else we do",
     "whyEyebrow": "Why KSF",
     "questionsEyebrow": "Questions"
   },
   "tracks": {
-    "title": "Every track, one subscription",
-    "eyebrow": "Certification tracks",
-    "intro": "Each track follows the vendor's published exam blueprint and is mentored by someone who has sat the exam. Applications are reviewed individually — pick the track that matches where you are now, not where you would like to be.",
+    "title": "Every course, one subscription",
+    "eyebrow": "Certification courses",
+    "intro": "Each course follows the vendor's published exam blueprint and is mentored by someone who has sat the exam. Applications are reviewed individually — pick the course that matches where you are now, not where you would like to be.",
     "from": "From £{price}",
-    "notSureTitle": "Not sure which track fits?",
+    "notSureTitle": "Not sure which course fits?",
     "notSureBody": "Tell us where you are and what you are aiming at. We will point you at the right one — including if that means waiting.",
     "askUs": "Ask us",
-    "applyForTrack": "Apply for this track",
+    "applyForTrack": "Apply for this course",
     "perMonth": "/ month",
     "rolling": "Rolling monthly. Cancel any time.",
     "refundNote": "Not accepted? Your subscription is cancelled and refunded in full, automatically."
@@ -50,7 +50,7 @@
       "experience": "Experience",
       "experienceBlurb": "Where you are starting from.",
       "motivation": "Motivation",
-      "motivationBlurb": "Why this track, and your time.",
+      "motivationBlurb": "Why this course, and your time.",
       "review": "Review",
       "reviewBlurb": "Check and submit."
     },
@@ -75,7 +75,7 @@
       "experienced": "Already working in this area"
     },
     "review": {
-      "track": "Track",
+      "track": "Course",
       "name": "Name",
       "email": "Email",
       "phone": "Phone",
@@ -123,14 +123,14 @@
     "applyFallback": "We could not submit that just now. Please email {email} and we will take your application by hand.",
     "rateLimited": "That is a few messages in a short time. Please wait {minutes} minutes, or email {email}.",
     "applyRateLimited": "That is several applications in a short time. Please wait, or email {email}.",
-    "trackNotFound": "That track could not be found. Please start again from the track page.",
+    "trackNotFound": "That course could not be found. Please start again from the course page.",
     "checkFailed": "That check did not pass. Please try again.",
     "verificationFailed": "Verification failed."
   },
   "contact": {
     "eyebrow": "Contact",
     "title": "Talk to us",
-    "intro": "About a service, a project, or which certification track fits you. We answer within {responseTime}.",
+    "intro": "About a service, a project, or which certification course fits you. We answer within {responseTime}.",
     "sendEnquiry": "Send an enquiry",
     "sendButton": "Send enquiry",
     "whatAbout": "What is this about?",
@@ -197,14 +197,14 @@
   },
   "common": {
     "readMore": "Read more",
-    "allTracks": "All tracks",
+    "allTracks": "All courses",
     "getInvolved": "Get involved",
     "submitted": "submitted",
     "responseTime": "3 working days",
     "coverage": "Worldwide service"
   },
   "footer": {
-    "tracks": "Tracks",
+    "tracks": "Courses",
     "services": "Services",
     "company": "Company",
     "legal": "Legal",
@@ -217,20 +217,20 @@
     "followUs": "Follow KSF"
   },
   "meta": {
-    "tracksTitle": "Certification tracks",
-    "tracksDescription": "Eight certification preparation tracks covering CompTIA, Cisco and EC-Council exams. One subscription, mentored support, £{price} a month.",
+    "tracksTitle": "Certification courses",
+    "tracksDescription": "Eight certification preparation courses covering CompTIA, Cisco and EC-Council exams. One subscription, mentored support, £{price} a month.",
     "contactTitle": "Contact",
     "contactDescription": "Talk to KSF Tech Services about cyber security, IT support, networks, data protection or consulting. {coverage}.",
     "successTitle": "Application received",
     "statusTitle": "Your application",
     "applyTitle": "Apply — {track}",
-    "applyDescription": "Apply for the {track} track with KSF Tech Services.",
+    "applyDescription": "Apply for the {track} course with KSF Tech Services.",
     "siteTitle": "KSF Tech Services — Certification training and cyber security",
     "siteDescription": "Certification training and cyber security services from KSF Tech Services. Prepare for CompTIA, Cisco and EC-Council exams with mentored support from £{price} a month.",
     "servicesTitle": "Services",
     "servicesDescription": "Cyber security, IT support, network solutions, data protection and consulting from KSF Tech Services.",
     "pricingTitle": "Pricing",
-    "pricingDescription": "One subscription, every certification track, £{price} a month. Not accepted? Refunded in full, automatically.",
+    "pricingDescription": "One subscription, every certification course, £{price} a month. Not accepted? Refunded in full, automatically.",
     "aboutTitle": "About",
     "aboutDescription": "KSF Tech Services is a working security firm. The certification training exists because this is what we do every day.",
     "faqTitle": "Frequently asked questions",
@@ -261,7 +261,7 @@
     "receivedSubject": "Application received — {reference}"
   },
   "cta": {
-    "title": "Ready to start? Apply to a track today.",
+    "title": "Ready to start? Apply to a course today.",
     "body": "£{price} a month, mentored preparation, and a real answer from a real person. Not accepted? You are refunded in full, automatically."
   },
   "legal": {

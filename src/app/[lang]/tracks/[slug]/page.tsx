@@ -125,7 +125,7 @@ export default async function TrackPage({ params }: Params) {
                   href={`/tracks/${track.slug}/apply`}
                   className="mt-5 flex w-full items-center justify-center gap-2 bg-blue px-6 py-3.5 font-semibold text-white transition-colors hover:bg-navy-3"
                 >
-                  Apply for this track
+                  Apply for this course
                   <ArrowRight size={16} />
                 </Link>
 
@@ -175,7 +175,7 @@ export default async function TrackPage({ params }: Params) {
           {/* 07 · Syllabus */}
           <section className="border-t border-line py-14">
             <h2 className="font-display text-2xl font-bold text-navy">
-              What the track covers
+              What the course covers
             </h2>
             <p className="mt-2 max-w-2xl text-ink-dim">
               Structured around the {track.vendor} exam blueprint for {track.examCode}.
@@ -244,7 +244,7 @@ export default async function TrackPage({ params }: Params) {
           {related.length > 0 && (
             <section className="border-t border-line py-14">
               <h2 className="font-display text-xl font-semibold text-navy">
-                Related tracks
+                Related courses
               </h2>
               <ul className="mt-6 grid gap-4 sm:grid-cols-3">
                 {related.map((t) => (
@@ -258,7 +258,7 @@ export default async function TrackPage({ params }: Params) {
                         {t.shortName}
                       </h3>
                       <span className="mt-3 inline-flex items-center gap-1.5 text-[0.8rem] font-semibold text-blue-lift">
-                        View track
+                        View course
                         <ArrowRight
                           size={13}
                           className="transition-transform group-hover:translate-x-0.5"

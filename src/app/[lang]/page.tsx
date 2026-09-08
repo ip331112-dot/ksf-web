@@ -13,7 +13,8 @@ import {
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CtaBand } from "@/components/layout/CtaBand";
-import { KsfMark } from "@/components/brand/KsfMark";
+import Image from "next/image";
+import { CoursePanel } from "@/components/brand/CoursePanel";
 import { SITE, PROMISES, HOW_IT_WORKS, SERVICES } from "@/content/site";
 import { tracksInOrder, INCLUDED, NOT_INCLUDED, PRICE_GBP } from "@/content/tracks";
 import { getDictionary } from "./dictionaries";
@@ -40,7 +41,7 @@ const FAQ = [
   },
   {
     q: "Do I need experience before applying?",
-    a: "It depends on the track. The foundation tracks assume general IT familiarity and nothing more. The advanced tracks genuinely expect prior experience — each track page lists its prerequisites honestly.",
+    a: "It depends on the course. The foundation courses assume general IT familiarity and nothing more. The advanced courses genuinely expect prior experience — each course page lists its prerequisites honestly.",
   },
   {
     q: "Can I cancel?",
@@ -74,8 +75,8 @@ export default async function HomePage() {
                 {t.home.kicker}
               </span>
 
-              <h1 className="mt-6 text-4xl font-extrabold text-white sm:text-5xl lg:text-6xl">
-                {t.home.strapline}
+              <h1 className="hero-title mt-6">
+                {fill(t.home.strapline, { price: PRICE_GBP })}
               </h1>
 
               <p className="mt-5 max-w-xl text-lg text-white/75">
@@ -99,10 +100,30 @@ export default async function HomePage() {
               </div>
 
               <p className="eyebrow mt-7 text-blue-lift">{SITE.tagline}</p>
+
+              {/*
+                The owner's flyer, exactly as supplied — no crop, no
+                recolour, no overlay. `public/ksf-flyer.jpg` is a byte-for-byte
+                copy of flyer.jpg.
+
+                alt="" because the flyer is decorative here: everything it
+                says already exists on the page as real text — the services
+                below, the tagline above it, the phone numbers and addresses
+                in the footer. A description would make a screen reader
+                announce all of it a second time, and any wording baked in
+                here would be English on the French page.
+              */}
+              <Image
+                src="/ksf-flyer.jpg"
+                alt=""
+                width={1024}
+                height={576}
+                className="mt-6 h-auto w-full"
+              />
             </div>
 
             <div className="hidden justify-center lg:flex">
-              <KsfMark className="w-64 text-white/90" mono />
+              <CoursePanel />
             </div>
           </div>
         </section>
@@ -125,15 +146,15 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* 04 · Certification tracks */}
+        {/* 04 · Certification courses */}
         <section className="mx-auto max-w-6xl px-5 py-20 lg:px-8 lg:py-24">
           <div className="max-w-2xl">
             <span className="eyebrow text-blue-lift">{t.home.tracksEyebrow}</span>
             <h2 className="mt-3 text-3xl font-extrabold text-navy sm:text-4xl">
-              Eight tracks. One subscription.
+              Eight courses. One subscription.
             </h2>
             <p className="mt-4 text-ink-dim">
-              Every track is structured around the vendor&apos;s published exam blueprint
+              Every course is structured around the vendor&apos;s published exam blueprint
               and mentored by someone who has sat it. Pick the one that matches where
               you are now.
             </p>
@@ -287,7 +308,7 @@ export default async function HomePage() {
             <div className="border border-line bg-surface p-7">
               <span className="eyebrow text-ink-faint">All-access</span>
               <p className="mt-3 flex items-baseline gap-1.5">
-                <span className="font-display text-5xl font-extrabold text-navy">
+                <span className="stat-figure">
                   £{PRICE_GBP}
                 </span>
                 <span className="text-ink-dim">{t.tracks.perMonth}</span>

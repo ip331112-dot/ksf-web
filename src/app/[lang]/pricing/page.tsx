@@ -36,11 +36,11 @@ export default function PricingPage() {
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
             <span className="eyebrow text-blue-lift">Pricing</span>
             <h1 className="mt-3 max-w-2xl text-4xl font-extrabold text-balance text-navy sm:text-5xl">
-              One price, every track
+              One price, every course
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-ink-dim">
               No tiers, no bundles, no discount that expires at midnight. One
-              subscription covers all eight certification tracks.
+              subscription covers all eight certification courses.
             </p>
           </div>
         </section>
@@ -63,7 +63,7 @@ export default function PricingPage() {
                 href="/tracks"
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 bg-blue px-6 py-3.5 font-semibold text-white transition-colors hover:bg-blue-lift"
               >
-                Choose a track
+                Choose a course
                 <ArrowRight size={17} />
               </Link>
               <p className="mt-4 border-t border-line pt-4 text-[0.8rem] leading-relaxed text-ink-dim">

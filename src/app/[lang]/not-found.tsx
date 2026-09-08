@@ -44,7 +44,7 @@ export default function NotFound() {
                 {t.name}
               </span>
               <span className="mt-2 inline-flex items-center gap-1 text-sm text-blue-lift">
-                View track
+                View course
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
               </span>
             </Link>
@@ -62,7 +62,7 @@ export default function NotFound() {
             href="/tracks"
             className="inline-flex items-center gap-2 border border-line px-6 py-3 font-semibold text-navy transition-colors hover:border-navy"
           >
-            All eight tracks
+            All eight courses
           </Link>
         </div>
       </main>

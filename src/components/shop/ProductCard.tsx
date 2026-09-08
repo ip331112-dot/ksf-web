@@ -63,7 +63,7 @@ export function ProductCard({
         </span>
       </div>
 
-      <div className="mt-3.5 flex aspect-4/3 items-center justify-center border border-line-soft bg-surface-2">
+      <div className="img-atmos mt-3.5 flex aspect-4/3 items-center justify-center border border-line-soft bg-surface-2">
         {cover ? (
           /* Supabase storage is not in images.remotePatterns; adding it would
              route every product photo through the optimiser for no gain on an

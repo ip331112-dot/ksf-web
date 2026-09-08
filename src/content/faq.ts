@@ -50,15 +50,15 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "What are you actually assessing?",
-        a: "Whether the track you have chosen is the right one for where you are now. Most declines are not about ability; they are about someone applying for a track that assumes knowledge they have not built yet. Where that happens we say so and point you at the track that does fit.",
+        a: "Whether the course you have chosen is the right one for where you are now. Most declines are not about ability; they are about someone applying for a course that assumes knowledge they have not built yet. Where that happens we say so and point you at the course that does fit.",
       },
       {
-        q: "Can I apply for more than one track?",
-        a: "Apply for the one closest to your current level. If a different track suits you better we will say so in our feedback rather than decline you outright.",
+        q: "Can I apply for more than one course?",
+        a: "Apply for the one closest to your current level. If a different course suits you better we will say so in our feedback rather than decline you outright.",
       },
       {
         q: "Do I need a certification already?",
-        a: "Not for the foundation tracks. Intermediate and advanced tracks assume real prior knowledge, and each track page lists exactly what it expects before you apply.",
+        a: "Not for the foundation courses. Intermediate and advanced courses assume real prior knowledge, and each course page lists exactly what it expects before you apply.",
       },
     ],
   },
@@ -72,7 +72,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "How much time should I expect to commit?",
-        a: "Each track page gives an estimate in guided hours — from around 100 for the foundation tracks to 180 for CCNP ENCOR. How quickly you cover them is up to you; there is no fixed cohort or timetable.",
+        a: "Each course page gives an estimate in guided hours — from around 100 for the foundation courses to 180 for CCNP ENCOR. How quickly you cover them is up to you; there is no fixed cohort or timetable.",
       },
       {
         q: "Is KSF an accredited training provider?",

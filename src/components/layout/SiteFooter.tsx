@@ -118,7 +118,7 @@ export async function SiteFooter() {
         </div>
 
         {/* Legal base bar */}
-        <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 text-[0.75rem] text-white/45 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 text-[0.75rem] text-white/60 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {SITE.tradingName} {t.footer.tradingAs}{" "}
             {SITE.name}. {SITE.tradingAddress}
